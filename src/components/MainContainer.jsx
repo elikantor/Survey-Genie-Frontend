@@ -16,7 +16,8 @@ class MainContainer extends React.Component{
                     <Route path="/login" render={ this.renderForm } />
                     <Route path="/signup" render={ this.renderForm } />
                     <Route path="/profile" render={ this.renderProfile } />
-                    <Route path="/surveys" render={() => <SurveyContainer/> } />
+                    <Route exact path="/surveys" render={(routerProps) => <SurveyContainer routerProps={routerProps}/> } />
+                    <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer routerProps={routerProps}/> } />
                     <Route render={ () => <p>Page not Found</p> } />
                 </Switch>
             </div>
