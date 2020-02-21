@@ -4,7 +4,6 @@ import { Menu } from 'semantic-ui-react'
 
 export default class NavBar extends React.Component{
 
-
     render() {
         return(
         <Menu tabular>

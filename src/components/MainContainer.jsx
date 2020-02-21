@@ -4,13 +4,15 @@ import {Switch, Route} from 'react-router'
 import {withRouter} from 'react-router-dom'
 import SurveyContainer from './SurveyContainer'
 
+
 class MainContainer extends React.Component{
+
 
     render(){
         return(
-            <div>
+            <div className="MainContainer">
                 <Switch>
-                    <Route exactpath="/" render={() => <Home /> } />
+                    <Route path="/" exact render={() => <Home /> } />
                     <Route path="/login" render={ this.renderForm } />
                     <Route path="/signup" render={ this.renderForm } />
                     <Route path="/profile" render={ this.renderProfile } />
@@ -20,6 +22,7 @@ class MainContainer extends React.Component{
             </div>
         )
       };
+      
 }
 
 export default withRouter(MainContainer)

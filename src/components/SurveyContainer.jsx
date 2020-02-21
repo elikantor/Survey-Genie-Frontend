@@ -1,29 +1,38 @@
-import React from 'react'
-import Survey from './Survey'
+import React, { Component } from 'react'
+import SurveyCards from './SurveyCard'
 
-export default class SurveyContainer extends React.Component{
+const userUrl = "http://localhost:3000/users"
+
+export default class SurveyContainer extends Component{
 
     state = {
-        surveys: []
+        users: []
     }
-
+    
     componentDidMount(){
-        fetch()
+        fetch(`${userUrl}`)
         .then(r=>r.json())
         .then(data=>{
             this.setState({
-                surveys: data
+                users: data
             })
         })
     }
 
+    showSurveys = () => {
+        let surveyObjs = this.state.users.map(user=> [user.surveys, user.username])
+        console.log(surveyObjs)
+        return surveyObjs.map(surveyObj => <SurveyCards key={surveyObj.id} survey={surveyObj[0]} creator={surveyObj[1]}/>)
+    }
+
+
 
     render(){
-        let surveys = this.state.surveys.map(survey => <Survey key={survey.id} survey={survey}/>)
         return(
-          <div className="surveycontainer">
-              {surveys}
+          <div className="survey-container">
+              <h1>All Surveys</h1>
+              {this.state.users[0] ? this.showSurveys() : null}
           </div>
         )
-      }
+    }
 }
