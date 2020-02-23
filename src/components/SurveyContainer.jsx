@@ -34,20 +34,17 @@ export default class SurveyContainer extends Component{
     }
 
     renderSurvey = (surveyId) => {
-        let surveyObjs = this.state.users.map(user=> [user.surveys, user.username])
-        let survey = surveyObjs.filter(survey=> survey.id === surveyId )
-
+        let surveyArrs = this.state.users.map(user=> [user.surveys, user.username])
+        let surveyArr = surveyArrs.filter(surveyArr=> surveyArr[0][0].id === parseInt(surveyId) )
         return (
             <div className="survey">
-                <Survey survey={survey}/>
+                <Survey surveyArr={surveyArr}/>
             </div>
         )
-
     }
 
 
     render(){
-        console.log(this.props.users)
         return(
             <div className="conditional">
                 {this.conditional()}
