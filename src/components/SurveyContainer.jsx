@@ -38,7 +38,7 @@ export default class SurveyContainer extends Component{
         let surveyArr = surveyArrs.filter(surveyArr=> surveyArr[0][0].id === parseInt(surveyId) )
         return (
             <div className="survey">
-                <Survey surveyArr={surveyArr}/>
+                <Survey showResults={this.props.showResults} surveyArr={surveyArr}/>
             </div>
         )
     }
