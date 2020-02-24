@@ -1,8 +1,8 @@
 import React from 'react'
 import { Menu } from 'semantic-ui-react'
-import {NavLink} from 'react-router-dom'
+import {NavLink, withRouter} from 'react-router-dom'
 
-export default class Survey extends React.Component{
+class Survey extends React.Component{
 
   state = {
     survey: [],
@@ -35,31 +35,25 @@ export default class Survey extends React.Component{
       })
     }
 
-    let surveyState = this.state.survey
-    let questionArr = this.state.survey.map(ele => {return ele.question })
-    let y = []
-    if(surveyState.length > 0){
-      y = this.state.survey.map(ele => {
-        if(questionArr.includes(event.target.name)){
-          return surveyObj
-        } else {
-          return ele
-        }
-      })
-    }
     let surveyObj = {
       question: event.target.name,
       answer: event.target.value
     }
-    let newState = []
-    newState.push(surveyObj)
+    let y = []
+    let z = this.state.survey.map(ele => {
+        if(ele.question.includes(event.target.name)){
+          return null
+        } else {
+          y.push(ele)
+          return null
+        }
+    })
+
+    y.push(surveyObj)
 
     this.setState({
-      survey: newState
-    },()=> console.log(this.state.survey))
-
-    console.log(questionArr)
-
+      survey: y
+    })
   }
 
   renderSurvey = () => {
@@ -84,23 +78,6 @@ export default class Survey extends React.Component{
     return form
   }
 
-  // componentDidMount(){
-  //   let numOfQs = this.props.surveyArr[0][0][0].questions.length
-  //   let newState = []
-  //   let i = 0
-  //   while(i<numOfQs){
-  //     let stateObj = {
-  //       question: this.props.surveyArr[0][0][0].questions[i].content,
-  //       answer: ""
-  //     }
-  //     newState.push(stateObj)
-  //     i++
-  //   }
-  //   this.setState({
-  //     survey: newState
-  //   })
-  // }
-
   render(){
       return(
         <form className="survey">
@@ -115,10 +92,12 @@ export default class Survey extends React.Component{
             <br></br>
             <Menu >
                 <Menu.Item> 
-                    <NavLink to={`/results`} onSubmit={()=>this.props.showResults(this.state.survey)}>Submit Answers</NavLink>
+                    <NavLink to={`/results`} onSubmit={(routerProps)=>this.props.showResults(routerProps, this.state.survey, this.props.surveyArr[0][0][0].id)}>Submit Answers</NavLink>
                 </Menu.Item>
             </Menu>
           </form>
       )
     };
 }
+
+export default withRouter(Survey)

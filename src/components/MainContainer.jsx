@@ -7,7 +7,7 @@ import SurveyContainer from './SurveyContainer'
 
 class MainContainer extends React.Component{
 
-    showResults = (survey) => {
+    showResults = (routerProps, survey) => {
         console.log(survey)
     }
 
