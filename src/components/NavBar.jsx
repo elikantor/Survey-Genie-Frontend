@@ -5,7 +5,6 @@ import { Menu } from 'semantic-ui-react'
 export default class NavBar extends React.Component{
 
     render() {
-        console.log(this.props)
         return(
         <Menu tabular>
             <Menu.Item> 
@@ -21,7 +20,7 @@ export default class NavBar extends React.Component{
             </Menu.Item> : null }
 
             {this.props.token ? <Menu.Item>
-            <NavLink to="/profile">Profile</NavLink>
+            <NavLink to={`/profile/${this.props.user.id}`}>Profile</NavLink>
             </Menu.Item> : null }
             
             {this.props.token ? <Menu.Item>
@@ -29,7 +28,7 @@ export default class NavBar extends React.Component{
             </Menu.Item> : null }
 
             <Menu.Item> 
-                <NavLink to="/surveys">Surveys</NavLink>
+                <NavLink to="/surveys">All Surveys</NavLink>
             </Menu.Item>
         </Menu>
         )

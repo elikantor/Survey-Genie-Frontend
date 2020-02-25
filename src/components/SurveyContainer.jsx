@@ -26,19 +26,31 @@ export default class SurveyContainer extends Component{
     }
 
     renderSurvey = (surveyId) => {
-        let surveyArrs = []
+        let userSurveyArr = []
+        let userSurveyProp = []
         let b = this.props.users.map(user=> {
-            if(user.surveys.length ===0){
+            if(user.surveys.length === 0){
                 return null
             } else {
-                surveyArrs.push([user.surveys, user.username])
+                userSurveyArr.push([user.surveys, user.username])
                 return null
             }
         })
-        let surveyArr = surveyArrs.filter(surveyArr=> surveyArr[0][0].id === parseInt(surveyId) )
+        
+        let userArr = userSurveyArr.filter(surveyArr=> { 
+                let i = 0
+                while(i < surveyArr[0].length){
+                    if(surveyArr[0][i].id === parseInt(surveyId)){
+                        userSurveyProp.push(surveyArr[0][i])
+                        userSurveyProp.push(surveyArr[1])
+                    }
+                    i++
+                }
+                return false
+        })
         return (
             <div className="survey">
-                <Survey surveyArr={surveyArr} survey={this.props.survey} checkbox_answers={this.props.checkbox_answers} saveAnswer={this.props.saveAnswer}/>
+                <Survey submitAnswers={this.props.submitAnswers} userSurveyProp={userSurveyProp} surveyResult={this.props.surveyResult} checkbox_answers={this.props.checkbox_answers} saveAnswer={this.props.saveAnswer}/>
             </div>
         )
     }

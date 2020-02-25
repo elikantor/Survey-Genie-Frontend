@@ -1,19 +1,22 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 export default class Question extends React.Component{
 
     state = {
-        question: "",
-        a1: "",
-        a2: "",
-        a3: "",
-        a4: "",
-        a5: "",
+        number: this.props.question.number,
+        question: this.props.question.question,
+        a1: this.props.question.a1,
+        a2: this.props.question.a2,
+        a3: this.props.question.a3,
+        a4: this.props.question.a4,
+        a5: this.props.question.a5
     }
 
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value
+        }, () => {
+            this.props.handleQuestionChange(this.state)
         })
     }
 
@@ -29,7 +32,6 @@ export default class Question extends React.Component{
                 Answer 4: <input name="a4" value={this.state.a4} onChange={this.handleChange}/>
                 Answer 5: <input name="a5" value={this.state.a5} onChange={this.handleChange}/>
             </ul>
-            <button onClick={()=>{this.props.handleSubmit(this.state)}}>Submit</button>
         </div>
         )
     }
