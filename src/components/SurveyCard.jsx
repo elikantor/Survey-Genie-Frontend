@@ -4,6 +4,14 @@ import {NavLink} from 'react-router-dom'
 
 export default class SurveyCards extends Component{
 
+    state = {
+        user: false
+    }
+
+    componentDidMount(){
+
+    }
+
     renderSurveyCards = () => {
         let surveyCards = this.props.survey.map(survey => 
             <div className="survey-card">
@@ -14,7 +22,10 @@ export default class SurveyCards extends Component{
                             <NavLink to={`/surveys/${survey.id}`}>Take Survey</NavLink>
                         </Menu.Item>
                         <Menu.Item> 
-                            <NavLink to={`/surveys/${survey.id}`}>See Results</NavLink>
+                            <NavLink to={`/results/${survey.id}`}>See Results</NavLink>
+                        </Menu.Item>
+                        <Menu.Item> 
+                            <button onClick={()=>this.props.deleteSurvey(survey.id)}>Delete Survey</button>
                         </Menu.Item>
                     </Menu>
             </div>

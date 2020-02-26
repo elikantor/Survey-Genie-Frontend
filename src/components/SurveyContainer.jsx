@@ -14,7 +14,7 @@ export default class SurveyContainer extends Component{
                 return null
             }
         })
-        return surveyObjs.map(surveyObj => <SurveyCards key={surveyObj.id} survey={surveyObj[0]} creator={surveyObj[1]}/>)
+        return surveyObjs.map(surveyObj => <SurveyCards deleteSurvey={this.props.deleteSurvey} key={surveyObj.id} survey={surveyObj[0]} creator={surveyObj[1]}/>)
     }
 
     conditional = () => {

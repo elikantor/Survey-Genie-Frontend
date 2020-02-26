@@ -10,6 +10,7 @@ import Profile from './components/Profile'
 import CreateSurvey from './components/CreateSurvey'
 const userUrl = "http://localhost:3000/users"
 let surveyUrl = "http://localhost:3000/surveys"
+let answerUrl = "http://localhost:3000/answers"
 
 class App extends React.Component{
   
@@ -19,6 +20,7 @@ class App extends React.Component{
       id: 0
     },
     users: [],
+    surveys: [],
     survey_id: 0,
     surveyResult: [],
     checkbox_answers: [],
@@ -105,6 +107,13 @@ class App extends React.Component{
     .then(data=>{
         this.setState({
             users: data
+        })
+    })
+    fetch(`${surveyUrl}`)
+    .then(r=>r.json())
+    .then(data=>{
+        this.setState({
+            surveys: data
         })
     })
   }
@@ -195,7 +204,9 @@ class App extends React.Component{
     .then(data => {
       if (!data.error) {
         localStorage.setItem("token", data.token)
+        // debugger
         this.setState({
+          users: [...this.state.users, data.user],
           user: data.user,
           token: data.token
         }, () => {
@@ -225,12 +236,59 @@ class App extends React.Component{
 //renders User Profile after login or signup
   renderProfile = (routerProps) => {
     let user = this.state.users.filter(user => user.id === parseInt(routerProps.match.params.id))
-    return <Profile user={user} routerProps={routerProps} />
+    if(user) {
+      return <Profile user={user} routerProps={routerProps} />
+    } else {
+      return <p>LOADING</p>
+    }
+  
+  }
+
+// renders survey results
+  renderResults = (routerProps) => {
+    let survey = this.state.surveys.find(survey => survey.id === parseInt(routerProps.match.params.id))
+    console.log(survey)
+    if (survey){
+      return <Results survey={survey} {...routerProps} />
+    } else {
+      return <p>LOADING</p>
+    }
   }
 
   submitAnswers = (surveyResult, surveyArr, e) => {
     e.preventDefault()
-    console.log(surveyResult, surveyArr)
+    let arr = []
+    
+    for (let el of surveyArr.questions){
+      const foundQuestion = surveyResult.find(obj => obj.question === el.content )
+      const backendAnswerToBeUpdated = el.answers.find(a => a.content === foundQuestion.answer)
+      backendAnswerToBeUpdated.total ++
+      arr.push(backendAnswerToBeUpdated)
+    }
+
+    arr.forEach(ele => {
+      fetch(`${answerUrl}/${ele.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          total: ele.total
+        })
+      })
+    })
+    this.setState({
+      survey_id: 0,
+      surveyResult: [],
+      checkbox_answers: []
+    }, ()=> this.props.history.push(`/surveys`))
+  }
+
+  deleteSurvey = (id) => {
+    fetch(`${surveyUrl}/${id}`, {
+      method: "DELETE"
+    })
+    this.props.history.push(`/surveys`)
   }
   
   render(){
@@ -242,9 +300,9 @@ class App extends React.Component{
             <Route path="/login" render={ this.renderForm } />
             <Route path="/signup" render={ this.renderForm } />
             <Route path="/profile/:id" render={(routerProps)=> this.renderProfile(routerProps) } />
-            <Route exact path="/surveys" render={(routerProps) => <SurveyContainer submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} routerProps={routerProps}/> } />
-            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
-            <Route path="/results" render={() => <Results survey={this.state}/> } />
+            <Route exact path="/surveys" render={(routerProps) => <SurveyContainer deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} routerProps={routerProps}/> } />
+            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
+            <Route path="/results/:id" render={(routerProps) => this.renderResults(routerProps) } />
             <Route path="/createsurvey" render={() => <CreateSurvey name={this.state.name} questions={this.state.questions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleChange={this.handleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
             <Route render={ () => <p>Page not Found</p> } />
         </Switch>

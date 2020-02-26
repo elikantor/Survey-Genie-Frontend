@@ -11,6 +11,7 @@ class Profile extends Component {
     }
 
     conditional = () => {
+        // debugger
         return(this.props.routerProps.location.pathname.includes("/survey") ? this.renderSurvey(this.props.routerProps.match.params.id) :
             <div className="survey-container">
                 <h1>{this.props.user[0].username}'s Surveys</h1>
