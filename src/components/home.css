@@ -1,0 +1,9 @@
+.home{
+    position: relative;
+    text-align: center;
+}
+
+.home img {
+    height: auto;
+    width: 100vw;
+}

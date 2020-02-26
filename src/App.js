@@ -1,13 +1,15 @@
 import React from 'react';
-import NavBar from './components/NavBar'
-import Home from './components/Home'
 import {Switch, Route} from 'react-router'
 import {withRouter} from 'react-router-dom'
+//component imports
+import NavBar from './components/NavBar'
+import Home from './components/Home'
 import SurveyContainer from './components/SurveyContainer'
 import Results from './components/Results'
 import Form from './components/Form'
 import Profile from './components/Profile'
 import CreateSurvey from './components/CreateSurvey'
+//fetch URLs
 const userUrl = "http://localhost:3000/users"
 let surveyUrl = "http://localhost:3000/surveys"
 let answerUrl = "http://localhost:3000/answers"
@@ -15,12 +17,12 @@ let answerUrl = "http://localhost:3000/answers"
 class App extends React.Component{
   
   state = {
+    users: [],
+    surveys: [],
     user: {
       username: "",
       id: 0
     },
-    users: [],
-    surveys: [],
     survey_id: 0,
     surveyResult: [],
     checkbox_answers: [],
@@ -28,6 +30,24 @@ class App extends React.Component{
     name: "",
     questions: [],
     counter: 1
+  }
+
+  // fetches Users & Surveys
+  componentDidMount(){
+    fetch(`${userUrl}`)
+    .then(r=>r.json())
+    .then(data=>{
+        this.setState({
+            users: data
+        })
+    })
+    fetch(`${surveyUrl}`)
+    .then(r=>r.json())
+    .then(data=>{
+        this.setState({
+            surveys: data
+        })
+    })
   }
 
 
@@ -38,7 +58,7 @@ class App extends React.Component{
     })
   }
 
-  //creates question object array in state used to POST create survey
+  //used to CreateSurvey
   handleQuestionChange = (state) => {
     let newState = this.state.questions
     let index = state.number - 1
@@ -48,7 +68,7 @@ class App extends React.Component{
     })
   }
 
-  //dynamically adds questions to createSurvey form
+  //adds questions to CreateSurvey
   addQuestion = () => {
     let newQuestion = {
         number: this.state.counter,
@@ -65,7 +85,7 @@ class App extends React.Component{
     })
   }
 
-  //Submits new survey to backend
+  //Submits newly CreatedSurvey
   handleSubmit = (questions) => {
     let postObj = questions.map(question => {
         return {
@@ -93,28 +113,11 @@ class App extends React.Component{
     })
     .then(r=>r.json())
     .then(data => {
-        let newState = [...this.state.surveyResult, data]
         this.setState({
-          surveyResult: newState
-        })
-        this.props.history.push(`/profile/${this.state.user.id}`)
-    })
-  }
-
-  componentDidMount(){
-    fetch(`${userUrl}`)
-    .then(r=>r.json())
-    .then(data=>{
-        this.setState({
-            users: data
-        })
-    })
-    fetch(`${surveyUrl}`)
-    .then(r=>r.json())
-    .then(data=>{
-        this.setState({
-            surveys: data
-        })
+          surveys: [...this.state.surveys, data],
+          questions: [],
+          name: ""
+        }, ()=> this.props.history.push(`/profile/${this.state.user.id}`))
     })
   }
 
@@ -237,7 +240,7 @@ class App extends React.Component{
   renderProfile = (routerProps) => {
     let user = this.state.users.filter(user => user.id === parseInt(routerProps.match.params.id))
     if(user) {
-      return <Profile user={user} routerProps={routerProps} />
+      return <Profile token={this.state.token} deleteSurvey={this.deleteSurvey} users={this.state.users} user={user} surveys={this.state.surveys} routerProps={routerProps} />
     } else {
       return <p>LOADING</p>
     }
@@ -255,15 +258,18 @@ class App extends React.Component{
     }
   }
 
+  //updates survey results
   submitAnswers = (surveyResult, surveyArr, e) => {
     e.preventDefault()
     let arr = []
     
     for (let el of surveyArr.questions){
       const foundQuestion = surveyResult.find(obj => obj.question === el.content )
-      const backendAnswerToBeUpdated = el.answers.find(a => a.content === foundQuestion.answer)
-      backendAnswerToBeUpdated.total ++
-      arr.push(backendAnswerToBeUpdated)
+      if(foundQuestion){
+        const backendAnswerToBeUpdated = el.answers.find(a => a.content === foundQuestion.answer)
+        backendAnswerToBeUpdated.total ++
+        arr.push(backendAnswerToBeUpdated)
+      }
     }
 
     arr.forEach(ele => {
@@ -277,16 +283,30 @@ class App extends React.Component{
         })
       })
     })
+    fetch(`${surveyUrl}`)
+    .then(r=>r.json())
+    .then(data=>{
+      this.setState({
+        surveys: data
+      })
+    })
     this.setState({
       survey_id: 0,
       surveyResult: [],
       checkbox_answers: []
-    }, ()=> this.props.history.push(`/surveys`))
+    }, ()=> this.props.history.push(`/results/${surveyArr.id}`))
   }
 
-  deleteSurvey = (id) => {
-    fetch(`${surveyUrl}/${id}`, {
+  deleteSurvey = (surveyId) => {
+    fetch(`${surveyUrl}/${surveyId}`, {
       method: "DELETE"
+    })
+    .then(r=>r.json())
+    .then(data=>{
+      let surveyArr = this.state.surveys.filter(survey=> survey.id !== surveyId)
+      this.setState({
+        surveys: surveyArr
+      })
     })
     this.props.history.push(`/surveys`)
   }
@@ -300,8 +320,8 @@ class App extends React.Component{
             <Route path="/login" render={ this.renderForm } />
             <Route path="/signup" render={ this.renderForm } />
             <Route path="/profile/:id" render={(routerProps)=> this.renderProfile(routerProps) } />
-            <Route exact path="/surveys" render={(routerProps) => <SurveyContainer deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} routerProps={routerProps}/> } />
-            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
+            <Route exact path="/surveys" render={(routerProps) => <SurveyContainer surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} routerProps={routerProps}/> } />
+            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
             <Route path="/results/:id" render={(routerProps) => this.renderResults(routerProps) } />
             <Route path="/createsurvey" render={() => <CreateSurvey name={this.state.name} questions={this.state.questions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleChange={this.handleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
             <Route render={ () => <p>Page not Found</p> } />

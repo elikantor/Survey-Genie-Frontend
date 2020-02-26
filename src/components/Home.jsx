@@ -1,4 +1,5 @@
 import React from 'react'
+import './home.css'
 
 export default class Home extends React.Component{
   
@@ -6,7 +7,7 @@ export default class Home extends React.Component{
         return(
           <div className="home">
               <h2>Flatiron's Survey App</h2>
-              <img src="https://www.icmi.com/-/media/Images/Resources/Articles/2019/post-call-surveys.ashx?h=222&w=400&la=en&hash=8081FE14FB3265DFAFF970F22F447962420CDEE4" alt="logo" />
+              <img src="https://www.meridiaars.com/wp-content/uploads/2014/12/voting.jpg" alt="logo" />
           </div>
         )
       };

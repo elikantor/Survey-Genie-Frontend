@@ -5,16 +5,7 @@ import Survey from './Survey'
 export default class SurveyContainer extends Component{
 
     showSurveys = () => {
-        let surveyObjs = []
-        let a = this.props.users.map(user=> {
-            if(user.surveys.length === 0){
-                return null
-            } else {
-            surveyObjs.push([user.surveys, user.username])
-                return null
-            }
-        })
-        return surveyObjs.map(surveyObj => <SurveyCards deleteSurvey={this.props.deleteSurvey} key={surveyObj.id} survey={surveyObj[0]} creator={surveyObj[1]}/>)
+        return this.props.surveys.map(survey => <SurveyCards survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id} users={this.props.users}/>)
     }
 
     conditional = () => {

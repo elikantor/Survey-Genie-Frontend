@@ -5,6 +5,7 @@ class Results extends Component{
 
   renderResults = () => {
     let numOfQs = this.props.survey.questions.length
+    console.log(this.props)
     let i = 0
     let form = []
     while (i < numOfQs){

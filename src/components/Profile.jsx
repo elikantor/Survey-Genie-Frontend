@@ -7,7 +7,8 @@ import { Menu } from 'semantic-ui-react'
 class Profile extends Component {
 
     showSurveys = () => {
-        return <SurveyCards key={this.props.user[0].id} survey={this.props.user[0].surveys} creator={this.props.user[0].username}/>
+        let surveys = this.props.surveys.filter(survey=> survey.user_id === this.props.user[0].id)
+        return surveys.map(survey => <SurveyCards token={this.props.token} deleteSurvey={this.props.deleteSurvey} key={survey.id} survey={survey} users={this.props.users}/>)
     }
 
     conditional = () => {
