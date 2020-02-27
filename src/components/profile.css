@@ -1,0 +1,8 @@
+.profile-container{
+    position: relative;
+}
+
+.profile-container img {
+    height: auto;
+    width: auto;
+}

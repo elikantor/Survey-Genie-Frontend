@@ -3,9 +3,10 @@ import SurveyCards from './SurveyCard'
 import Survey from './Survey'
 import {NavLink} from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
+import './profile.css'
 
 class Profile extends Component {
-
+    
     showSurveys = () => {
         let surveys = this.props.surveys.filter(survey=> survey.user_id === this.props.user[0].id)
         return surveys.map(survey => <SurveyCards token={this.props.token} deleteSurvey={this.props.deleteSurvey} key={survey.id} survey={survey} users={this.props.users}/>)
@@ -14,8 +15,12 @@ class Profile extends Component {
     conditional = () => {
         // debugger
         return(this.props.routerProps.location.pathname.includes("/survey") ? this.renderSurvey(this.props.routerProps.match.params.id) :
-            <div className="survey-container">
-                <h1>{this.props.user[0].username}'s Surveys</h1>
+            <div className="profile-container">
+                <h2>Welcome {this.props.user[0].username}!</h2>
+                <img className="image" src={`${this.props.user[0].image}`} alt="profile-pic"/>
+                <p>My interests: {this.props.user[0].interest}</p>
+                <p>Email: {this.props.user[0].email}</p>
+                <h3>Your Surveys</h3>
                 { this.showSurveys() }
             </div>)
     }

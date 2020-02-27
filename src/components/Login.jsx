@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Form extends Component {
+class Login extends Component {
 
   state = {
     username: "",
@@ -20,12 +20,11 @@ class Form extends Component {
   }
 
   render() {
-    let {formName} = this.props
     let {username, password} = this.state
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <h1>{formName}</h1>
+        <h1>Login Form</h1>
         <label htmlFor="username">Username:</label>
         <input type="text" autoComplete="off" name="username" value={username} onChange={this.handleChange}/>
         <label htmlFor="password">Password:</label>
@@ -37,4 +36,4 @@ class Form extends Component {
 
 }
 
-export default Form;
+export default Login;

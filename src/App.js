@@ -6,7 +6,8 @@ import NavBar from './components/NavBar'
 import Home from './components/Home'
 import SurveyContainer from './components/SurveyContainer'
 import Results from './components/Results'
-import Form from './components/Form'
+import Login from './components/Login'
+import Signup from './components/Signup'
 import Profile from './components/Profile'
 import CreateSurvey from './components/CreateSurvey'
 //fetch URLs
@@ -19,6 +20,8 @@ class App extends React.Component{
   state = {
     users: [],
     surveys: [],
+    questions: [],
+    answers: [],
     user: {
       username: "",
       id: 0
@@ -28,7 +31,7 @@ class App extends React.Component{
     checkbox_answers: [],
     token: "",
     name: "",
-    questions: [],
+    createdQuestions: [],
     counter: 1
   }
 
@@ -37,16 +40,26 @@ class App extends React.Component{
     fetch(`${userUrl}`)
     .then(r=>r.json())
     .then(data=>{
-        this.setState({
-            users: data
-        })
-    })
-    fetch(`${surveyUrl}`)
-    .then(r=>r.json())
-    .then(data=>{
-        this.setState({
-            surveys: data
-        })
+      let surveys = []
+      data.map(user => {
+        if(user.surveys.length > 0){
+          user.surveys.map(survey=> surveys.push(survey))
+        }
+      })
+      let questions = []
+      surveys.map(survey => {
+          survey.questions.map(question=> questions.push(question))
+      })
+      let answers = []
+      questions.map(question => {
+        question.answers.map(answer=> answers.push(answer))
+      })
+      this.setState({
+          users: data,
+          surveys: surveys,
+          questions: questions,
+          answers: answers
+      })
     })
   }
 
@@ -60,11 +73,11 @@ class App extends React.Component{
 
   //used to CreateSurvey
   handleQuestionChange = (state) => {
-    let newState = this.state.questions
+    let newState = this.state.createdQuestions
     let index = state.number - 1
     newState.splice(index, 1, state)
     this.setState({
-        questions: newState
+        createdQuestions: newState
     })
   }
 
@@ -81,7 +94,7 @@ class App extends React.Component{
     }
     this.setState({
         counter: this.state.counter + 1,
-        questions: [...this.state.questions, newQuestion]
+        createdQuestions: [...this.state.createdQuestions, newQuestion]
     })
   }
 
@@ -107,7 +120,7 @@ class App extends React.Component{
         },
         body: JSON.stringify({
             name: this.state.name,
-            questions: postObj,
+            createdQuestions: postObj,
             user_id: this.state.user.id
         })
     })
@@ -115,7 +128,7 @@ class App extends React.Component{
     .then(data => {
         this.setState({
           surveys: [...this.state.surveys, data],
-          questions: [],
+          createdQuestions: [],
           name: ""
         }, ()=> this.props.history.push(`/profile/${this.state.user.id}`))
     })
@@ -187,13 +200,12 @@ class App extends React.Component{
         }, () => {
           this.props.history.push(`/profile/${this.state.user.id}`)
         })
-
       }
     })
   }
 
 //signup
-  handleRegisterSubmit = (userInfo) => {
+  handleSignupSubmit = (userInfo) => {
     fetch("http://localhost:3000/users", {
       method: "POST",
       headers: {
@@ -219,15 +231,6 @@ class App extends React.Component{
     })
   }
 
-  //renders login & signup forms
-  renderForm = (routerProps) => {
-    if(routerProps.location.pathname === "/login"){
-      return <Form formName="Login Form" handleSubmit={this.handleLoginSubmit}/>
-    } else if (routerProps.location.pathname === "/signup") {
-      return <Form formName="Sign Up Form" handleSubmit={this.handleRegisterSubmit}/>
-    }
-  }
-
   signout = () => {
     localStorage.clear("token")
     this.props.history.push("/")
@@ -239,6 +242,7 @@ class App extends React.Component{
 //renders User Profile after login or signup
   renderProfile = (routerProps) => {
     let user = this.state.users.filter(user => user.id === parseInt(routerProps.match.params.id))
+    console.log(user)
     if(user) {
       return <Profile token={this.state.token} deleteSurvey={this.deleteSurvey} users={this.state.users} user={user} surveys={this.state.surveys} routerProps={routerProps} />
     } else {
@@ -250,7 +254,6 @@ class App extends React.Component{
 // renders survey results
   renderResults = (routerProps) => {
     let survey = this.state.surveys.find(survey => survey.id === parseInt(routerProps.match.params.id))
-    console.log(survey)
     if (survey){
       return <Results survey={survey} {...routerProps} />
     } else {
@@ -271,31 +274,59 @@ class App extends React.Component{
         arr.push(backendAnswerToBeUpdated)
       }
     }
+    console.log(arr)
 
-    arr.forEach(ele => {
-      fetch(`${answerUrl}/${ele.id}`, {
+    let i = 0
+    while(i< arr.length){
+      fetch(`${answerUrl}/${arr[i].id}`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json"
         },
         body: JSON.stringify({
-          total: ele.total
+          id: arr[i].id,
+          content: arr[i].content,
+          total: arr[i].total
         })
       })
-    })
-    fetch(`${surveyUrl}`)
-    .then(r=>r.json())
-    .then(data=>{
-      this.setState({
-        surveys: data
+      .then(r=>r.json())
+      .then(data=>{
+        let question = this.state.questions.filter(question=> question.id === data.question_id)
+        let survey = this.state.surveys.filter(survey=> survey.id === question[0].survey_id)
+        console.log(survey)
       })
-    })
+      i++
+    }
     this.setState({
       survey_id: 0,
       surveyResult: [],
       checkbox_answers: []
     }, ()=> this.props.history.push(`/results/${surveyArr.id}`))
   }
+
+  // componentDidUpdate(prevProps, prevState){
+  //   let prevAnswers = 0
+  //   prevState.surveys.forEach(survey=> {
+  //     survey.questions.forEach(question=> {
+  //       question.answers.forEach(answer => {
+  //         prevAnswers += answer.total
+  //       })
+  //     })
+  //   })
+
+  //   let answers = 0
+  //   this.state.surveys.forEach(survey=> {
+  //     survey.questions.forEach(question=> {
+  //       question.answers.forEach(answer => {
+  //         answers += answer.total
+  //       })
+  //     })
+  //   })
+  //   console.log(answers, prevAnswers)
+       
+  //   if(prevAnswers !== answers){
+  //   }
+  // }
 
   deleteSurvey = (surveyId) => {
     fetch(`${surveyUrl}/${surveyId}`, {
@@ -317,13 +348,13 @@ class App extends React.Component{
         <NavBar token={this.state.token} signout={this.signout} user={this.state.user} />
         <Switch>
             <Route path="/" exact render={() => <Home /> } />
-            <Route path="/login" render={ this.renderForm } />
-            <Route path="/signup" render={ this.renderForm } />
+            <Route path="/login" render={ () => <Login handleSubmit={this.handleLoginSubmit} /> } />
+            <Route path="/signup" render={ () => <Signup handleSubmit={this.handleSignupSubmit} /> } />
             <Route path="/profile/:id" render={(routerProps)=> this.renderProfile(routerProps) } />
             <Route exact path="/surveys" render={(routerProps) => <SurveyContainer surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} routerProps={routerProps}/> } />
             <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
             <Route path="/results/:id" render={(routerProps) => this.renderResults(routerProps) } />
-            <Route path="/createsurvey" render={() => <CreateSurvey name={this.state.name} questions={this.state.questions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleChange={this.handleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
+            <Route path="/createsurvey" render={() => <CreateSurvey name={this.state.name} questions={this.state.createdQuestions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleChange={this.handleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
             <Route render={ () => <p>Page not Found</p> } />
         </Switch>
       </div>
