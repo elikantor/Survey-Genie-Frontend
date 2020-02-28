@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import './surveyCard.css'
 import { Menu } from 'semantic-ui-react'
 import {NavLink} from 'react-router-dom'
 
@@ -7,7 +8,11 @@ export default class SurveyCards extends Component{
 
     renderUser = (survey) => {
         let user = this.props.users.filter(user => user.id === survey.user_id)
-        return user[0].username
+        return (
+            <div className="userinfo">
+                Created by: {user[0].username} <img src={`${user[0].image}`} alt="survey-pic"/>
+            </div>
+        )
     }
 
     render(){
@@ -15,7 +20,7 @@ export default class SurveyCards extends Component{
         return(
             <div className="survey-card">
             <strong><p> {survey.name} </p></strong>
-            <p>Created by: {this.renderUser(survey)}</p>
+            {this.renderUser(survey)}
                 <Menu >
                     <Menu.Item> 
                         <NavLink to={`/surveys/${survey.id}`}>Take Survey</NavLink>
