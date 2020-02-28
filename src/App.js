@@ -319,7 +319,7 @@ class App extends React.Component{
         surveys: surveyArr
       })
     })
-    this.props.history.push(`/surveys`)
+    this.props.history.push(`/profile/${this.state.user.id}`)
   }
   
   render(){
