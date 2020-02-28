@@ -35,7 +35,7 @@ class App extends React.Component{
     counter: 1
   }
 
-  // fetches Users & Surveys
+  // fetches Users, Surveys, Questions, and Answers
   componentDidMount(){
     fetch(`${userUrl}`)
     .then(r=>r.json())
@@ -45,14 +45,17 @@ class App extends React.Component{
         if(user.surveys.length > 0){
           user.surveys.map(survey=> surveys.push(survey))
         }
+        return null
       })
       let questions = []
       surveys.map(survey => {
           survey.questions.map(question=> questions.push(question))
+          return null
       })
       let answers = []
       questions.map(question => {
         question.answers.map(answer=> answers.push(answer))
+        return null
       })
       this.setState({
           users: data,
@@ -63,6 +66,45 @@ class App extends React.Component{
     })
   }
 
+
+//CreateSurvey Methods  
+  //Submits newly CreatedSurvey
+  handleSubmit = (questions) => {
+    let postObj = questions.map(question => {
+        return {
+            content: question.question,
+            answers: [
+                {content: question.a1},
+                {content: question.a2},
+                {content: question.a3},
+                {content: question.a4},
+                {content: question.a5},
+            ]
+        }
+    })
+
+    fetch(`${surveyUrl}`, {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+            name: this.state.name,
+            questions: postObj,
+            user_id: this.state.user.id
+        })
+    })
+    .then(r=>r.json())
+    .then(data => {
+        this.setState({
+          surveys: [...this.state.surveys, data],
+          createdQuestions: [],
+          name: ""
+        }, () => {
+          this.props.history.push(`/profile/${this.state.user.id}`)
+        })
+    })
+  }
 
   //controls CreateSurvey Form
   handleChange = (event) => {
@@ -98,43 +140,48 @@ class App extends React.Component{
     })
   }
 
-  //Submits newly CreatedSurvey
-  handleSubmit = (questions) => {
-    let postObj = questions.map(question => {
-        return {
-            content: question.question,
-            answers: [
-                {content: question.a1},
-                {content: question.a2},
-                {content: question.a3},
-                {content: question.a4},
-                {content: question.a5},
-            ]
-        }
-    })
+//Answer Survey Methods
+  //Posts answers to backend and updates frontend
+  submitAnswers = (surveyResult, surveyArr, e) => {
+    e.preventDefault()
+    let arr = []
+    
+    for (let el of surveyArr.questions){
+      const foundQuestion = surveyResult.find(obj => obj.question === el.content )
+      if(foundQuestion){
+        const backendAnswerToBeUpdated = el.answers.find(a => a.content === foundQuestion.answer)
+        backendAnswerToBeUpdated.total ++
+        arr.push(backendAnswerToBeUpdated)
+      }
+    }
 
-    fetch(`${surveyUrl}`, {
-        method: "POST",
+    let i = 0
+    while(i< arr.length){
+      fetch(`${answerUrl}/${arr[i].id}`, {
+        method: "PATCH",
         headers: {
-            "Content-type": "application/json"
+          "Content-type": "application/json"
         },
         body: JSON.stringify({
-            name: this.state.name,
-            createdQuestions: postObj,
-            user_id: this.state.user.id
+          id: arr[i].id,
+          content: arr[i].content,
+          total: arr[i].total
         })
-    })
-    .then(r=>r.json())
-    .then(data => {
-        this.setState({
-          surveys: [...this.state.surveys, data],
-          createdQuestions: [],
-          name: ""
-        }, ()=> this.props.history.push(`/profile/${this.state.user.id}`))
-    })
+      })
+      .then(r=>r.json())
+      .then(data=>{
+        this.setState({...this.state})
+      })
+      i++
+    }
+    this.setState({
+      survey_id: 0,
+      surveyResult: [],
+      checkbox_answers: []
+    }, ()=> this.props.history.push(`/results/${surveyArr.id}`))
   }
 
-//provides control of survey when survey is being answered
+  //controls surveyform when being answered
   saveAnswer = (Qs, event) => {
     let currentState = this.state.checkbox_answers
     if(currentState.includes(event.target.value)){
@@ -147,7 +194,8 @@ class App extends React.Component{
         let newState = []
         let questionObj = Qs.filter(ele => ele.content === event.target.name)
         let ansArr = questionObj[0].answers.map(ele=>ele.content)
-        let x = currentState.map(ele => {
+        
+        currentState.map(ele => {
           if(ansArr.includes(ele)){
               return null
           } else {
@@ -165,7 +213,8 @@ class App extends React.Component{
         answer: event.target.value
     }
     let y = []
-    let z = this.state.surveyResult.map(ele => {
+    
+    this.state.surveyResult.map(ele => {
         if(ele.question.includes(event.target.name)){
             return null
         } else {
@@ -242,13 +291,11 @@ class App extends React.Component{
 //renders User Profile after login or signup
   renderProfile = (routerProps) => {
     let user = this.state.users.filter(user => user.id === parseInt(routerProps.match.params.id))
-    console.log(user)
     if(user) {
       return <Profile token={this.state.token} deleteSurvey={this.deleteSurvey} users={this.state.users} user={user} surveys={this.state.surveys} routerProps={routerProps} />
     } else {
       return <p>LOADING</p>
     }
-  
   }
 
 // renders survey results
@@ -260,73 +307,6 @@ class App extends React.Component{
       return <p>LOADING</p>
     }
   }
-
-  //updates survey results
-  submitAnswers = (surveyResult, surveyArr, e) => {
-    e.preventDefault()
-    let arr = []
-    
-    for (let el of surveyArr.questions){
-      const foundQuestion = surveyResult.find(obj => obj.question === el.content )
-      if(foundQuestion){
-        const backendAnswerToBeUpdated = el.answers.find(a => a.content === foundQuestion.answer)
-        backendAnswerToBeUpdated.total ++
-        arr.push(backendAnswerToBeUpdated)
-      }
-    }
-    console.log(arr)
-
-    let i = 0
-    while(i< arr.length){
-      fetch(`${answerUrl}/${arr[i].id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-type": "application/json"
-        },
-        body: JSON.stringify({
-          id: arr[i].id,
-          content: arr[i].content,
-          total: arr[i].total
-        })
-      })
-      .then(r=>r.json())
-      .then(data=>{
-        let question = this.state.questions.filter(question=> question.id === data.question_id)
-        let survey = this.state.surveys.filter(survey=> survey.id === question[0].survey_id)
-        console.log(survey)
-      })
-      i++
-    }
-    this.setState({
-      survey_id: 0,
-      surveyResult: [],
-      checkbox_answers: []
-    }, ()=> this.props.history.push(`/results/${surveyArr.id}`))
-  }
-
-  // componentDidUpdate(prevProps, prevState){
-  //   let prevAnswers = 0
-  //   prevState.surveys.forEach(survey=> {
-  //     survey.questions.forEach(question=> {
-  //       question.answers.forEach(answer => {
-  //         prevAnswers += answer.total
-  //       })
-  //     })
-  //   })
-
-  //   let answers = 0
-  //   this.state.surveys.forEach(survey=> {
-  //     survey.questions.forEach(question=> {
-  //       question.answers.forEach(answer => {
-  //         answers += answer.total
-  //       })
-  //     })
-  //   })
-  //   console.log(answers, prevAnswers)
-       
-  //   if(prevAnswers !== answers){
-  //   }
-  // }
 
   deleteSurvey = (surveyId) => {
     fetch(`${surveyUrl}/${surveyId}`, {

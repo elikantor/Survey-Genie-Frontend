@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SurveyCards from './SurveyCard'
-import Survey from './Survey'
 import {NavLink} from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 import './profile.css'
@@ -12,42 +11,15 @@ class Profile extends Component {
         return surveys.map(survey => <SurveyCards token={this.props.token} deleteSurvey={this.props.deleteSurvey} key={survey.id} survey={survey} users={this.props.users}/>)
     }
 
-    conditional = () => {
-        // debugger
-        return(this.props.routerProps.location.pathname.includes("/survey") ? this.renderSurvey(this.props.routerProps.match.params.id) :
-            <div className="profile-container">
-                <h2>Welcome {this.props.user[0].username}!</h2>
-                <img className="image" src={`${this.props.user[0].image}`} alt="profile-pic"/>
-                <p>My interests: {this.props.user[0].interest}</p>
-                <p>Email: {this.props.user[0].email}</p>
-                <h3>Your Surveys</h3>
-                { this.showSurveys() }
-            </div>)
-    }
-
-    renderSurvey = (surveyId) => {
-        let surveyArrs = []
-        let b = this.props.users.map(user=> {
-            if(user.surveys.length ===0){
-                return null
-            } else {
-                surveyArrs.push([user.surveys, user.username])
-                return null
-            }
-        })
-        let surveyArr = surveyArrs.filter(surveyArr=> surveyArr[0][0].id === parseInt(surveyId) )
-        return (
-            <div className="survey">
-                <Survey surveyArr={surveyArr} survey={this.props.survey} checkbox_answers={this.props.checkbox_answers} saveAnswer={this.props.saveAnswer}/>
-            </div>
-        )
-    }
-
-
   render() {
     return (
-        <div className="conditional">
-            {this.conditional()}
+        <div className="profile">
+            <h2>Welcome {this.props.user[0].username}!</h2>
+            <img className="image" src={`${this.props.user[0].image}`} alt="profile-pic"/>
+            <p>My interests: {this.props.user[0].interest}</p>
+            <p>Email: {this.props.user[0].email}</p>
+            <h3>Your Surveys</h3>
+            { this.showSurveys() }
             <br></br>
             <Menu>
                 <Menu.Item> 
