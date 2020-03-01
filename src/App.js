@@ -1,7 +1,6 @@
 import React from 'react';
 import {Switch, Route} from 'react-router'
 import {withRouter} from 'react-router-dom'
-//component imports
 import NavBar from './components/NavBar'
 import Home from './components/Home'
 import SurveyContainer from './components/SurveyContainer'
@@ -10,10 +9,10 @@ import Login from './components/Login'
 import Signup from './components/Signup'
 import Profile from './components/Profile'
 import CreateSurvey from './components/CreateSurvey'
-//fetch URLs
 const userUrl = "http://localhost:3000/users"
 let surveyUrl = "http://localhost:3000/surveys"
 let answerUrl = "http://localhost:3000/answers"
+
 
 class App extends React.Component{
   
@@ -24,12 +23,15 @@ class App extends React.Component{
     answers: [],
     user: {
       username: "",
+      interest: "",
+      email: "",
+      image: "",
       id: 0
     },
+    token: "",
     survey_id: 0,
     surveyResult: [],
     checkbox_answers: [],
-    token: "",
     name: "",
     createdQuestions: [],
     counter: 1
@@ -37,6 +39,28 @@ class App extends React.Component{
 
   // fetches Users, Surveys, Questions, and Answers
   componentDidMount(){
+    if (localStorage.getItem("token")) {
+      let token = localStorage.getItem("token")
+
+      fetch("http://localhost:3000/persist", {
+        headers: {
+          "Authorization": `bearer ${token}`
+        }
+      })
+      .then(r => r.json())
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("token", data.token)
+          this.setState({
+            user: data.user,
+            token: data.token
+          }, () => {
+            this.props.history.push("/profile")
+          })
+        }
+      })
+    }
+
     fetch(`${userUrl}`)
     .then(r=>r.json())
     .then(data=>{
@@ -290,12 +314,7 @@ class App extends React.Component{
 
 //renders User Profile after login or signup
   renderProfile = (routerProps) => {
-    let user = this.state.users.filter(user => user.id === parseInt(routerProps.match.params.id))
-    if(user) {
-      return <Profile token={this.state.token} deleteSurvey={this.deleteSurvey} users={this.state.users} user={user} surveys={this.state.surveys} routerProps={routerProps} />
-    } else {
-      return <p>LOADING</p>
-    }
+      return <Profile token={this.state.token} deleteSurvey={this.deleteSurvey} user={this.state.user} users={this.state.users} surveys={this.state.surveys} routerProps={routerProps} />
   }
 
 // renders survey results
@@ -330,7 +349,7 @@ class App extends React.Component{
             <Route path="/" exact render={() => <Home /> } />
             <Route path="/login" render={ () => <Login handleSubmit={this.handleLoginSubmit} /> } />
             <Route path="/signup" render={ () => <Signup handleSubmit={this.handleSignupSubmit} /> } />
-            <Route path="/profile/:id" render={(routerProps)=> this.renderProfile(routerProps) } />
+            <Route exact path="/profile/:id" render={(routerProps)=> this.renderProfile(routerProps) } />
             <Route exact path="/surveys" render={(routerProps) => <SurveyContainer surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} routerProps={routerProps}/> } />
             <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} users={this.state.users} surveyResult={this.state.surveyResult} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
             <Route path="/results/:id" render={(routerProps) => this.renderResults(routerProps) } />

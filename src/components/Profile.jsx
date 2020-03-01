@@ -7,17 +7,18 @@ import './profile.css'
 class Profile extends Component {
     
     showSurveys = () => {
-        let surveys = this.props.surveys.filter(survey=> survey.user_id === this.props.user[0].id)
+        let surveys = this.props.surveys.filter(survey=> survey.user_id === this.props.user.id)
         return surveys.map(survey => <SurveyCards token={this.props.token} deleteSurvey={this.props.deleteSurvey} key={survey.id} survey={survey} users={this.props.users}/>)
     }
 
   render() {
+      let {user} = this.props
     return (
         <div className="profile">
-            <h2>Welcome {this.props.user[0].username}!</h2>
-            <img src={`${this.props.user[0].image}`} alt="profile-pic"/>
-            <p>My interests: {this.props.user[0].interest}</p>
-            <p>Email: {this.props.user[0].email}</p>
+            <h2>Welcome {user.username}!</h2>
+            <img src={`${user.image}`} alt="profile-pic"/>
+            <p>My interests: {user.interest}</p>
+            <p>Email: {user.email}</p>
             <h3>Your Surveys</h3>
             { this.showSurveys() }
             <br></br>

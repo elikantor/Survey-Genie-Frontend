@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import {changeChart} from './actions/changeChart'
+import {connect} from 'react-redux'
 import {Pie} from 'react-chartjs-2';
 import {Bar} from 'react-chartjs-2';
 
@@ -9,21 +11,21 @@ class Results extends Component{
   }
 
   renderPies = () => {
-    this.setState({
+    this.props.changeChart({
       chartType: "PIE"
     })
   }
 
   renderBars = () => {
-    this.setState({
+    this.props.changeChart({
       chartType: "BAR"
     })
   }
 
   renderNumbers = () => {
-    this.setState({
+    this.props.changeChart({
       chartType: "NUMBER"
-    })
+    })    
   }
 
   renderPieCharts = () => {
@@ -157,8 +159,8 @@ class Results extends Component{
         <br></br>
         <div className="results">
           {
-            this.state.chartType === "PIE" ? this.renderPieCharts() : 
-            this.state.chartType === "BAR" ? this.renderBarCharts() :
+            this.props.chartType === "PIE" ? this.renderPieCharts() : 
+            this.props.chartType === "BAR" ? this.renderBarCharts() :
             this.renderNumberCharts() 
           }
         </div>
@@ -172,4 +174,11 @@ class Results extends Component{
   }
 }
 
-export default Results
+const MSTP = (state) => {
+  return { chartType: state.chartType }
+}
+
+const mapDispatchToProps = {pie, bar, number}
+
+
+export default connect(MSTP, mapDispatchToProps)(Results)
