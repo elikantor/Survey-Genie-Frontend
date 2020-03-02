@@ -5,7 +5,7 @@ import Survey from './Survey'
 export default class SurveyContainer extends Component{
 
     showSurveys = () => {
-        return this.props.surveys.map(survey => <SurveyCards survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id} users={this.props.users}/>)
+        return this.props.surveys.map(survey => <SurveyCards user={this.props.user} survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id} users={this.props.users}/>)
     }
 
     conditional = () => {
@@ -18,11 +18,11 @@ export default class SurveyContainer extends Component{
 
     renderSurvey = (surveyId) => {
         let survey=this.props.surveys.find(survey=>survey.id===parseInt(surveyId))
-        let user=this.props.users.find(user=>user.id === survey.user_id)
+        let creator=this.props.users.find(user=>user.id === survey.user_id)
 
         return (
             <div className="survey">
-                <Survey survey={survey} user={user} submitAnswers={this.props.submitAnswers} surveyResult={this.props.surveyResult} checkbox_answers={this.props.checkbox_answers} saveAnswer={this.props.saveAnswer}/>
+                <Survey survey={survey} user={this.props.user} creator={creator} submitAnswers={this.props.submitAnswers} surveyResult={this.props.surveyResult} checkbox_answers={this.props.checkbox_answers} saveAnswer={this.props.saveAnswer}/>
             </div>
         )
     }

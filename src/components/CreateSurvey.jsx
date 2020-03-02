@@ -4,7 +4,7 @@ import Question from './Question'
 class CreateSurvey extends Component{
 
     render(){
-        let questions = this.props.questions.length === 0 ? null : this.props.questions.map(question=> <Question handleQuestionChange={this.props.handleQuestionChange} question={question}/>)
+        let questions = this.props.questions.length === 0 ? null : this.props.questions.map(question=> <Question key={question.id} handleQuestionChange={this.props.handleQuestionChange} question={question}/>)
         return(
           <div className="createsurvey">
               <h2>Create a Survey</h2>

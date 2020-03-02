@@ -49,7 +49,7 @@ class Results extends Component{
       }
       return (
         <div>
-          <Pie data={data} options={options} height={30} width={150}/>
+          <Pie key={question.id} data={data} options={options} height={30} width={150}/>
           <br></br>
           <br></br>
         </div>
