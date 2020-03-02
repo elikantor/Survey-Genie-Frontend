@@ -1,32 +1,10 @@
 import React, { Component } from 'react'
-import {changeChart} from './actions/changeChart'
+import {setFilter} from './actions/actions'
 import {connect} from 'react-redux'
 import {Pie} from 'react-chartjs-2';
 import {Bar} from 'react-chartjs-2';
 
 class Results extends Component{
-
-  state = {
-    chartType: "PIE"
-  }
-
-  renderPies = () => {
-    this.props.changeChart({
-      chartType: "PIE"
-    })
-  }
-
-  renderBars = () => {
-    this.props.changeChart({
-      chartType: "BAR"
-    })
-  }
-
-  renderNumbers = () => {
-    this.props.changeChart({
-      chartType: "NUMBER"
-    })    
-  }
 
   renderPieCharts = () => {
     let {survey} = this.props
@@ -164,9 +142,9 @@ class Results extends Component{
             this.renderNumberCharts() 
           }
         </div>
-        <button onClick={this.renderPies}>Pie Charts</button>
-        <button onClick={this.renderBars}>Bar Charts</button>
-        <button onClick={this.renderNumbers}>Number Charts</button>
+        <button onClick={()=>{this.props.setFilter({chartType:"PIE"})}}>Pie Charts</button>
+        <button onClick={()=>{this.props.setFilter({chartType:"BAR"})}}>Bar Charts</button>
+        <button onClick={()=>{this.props.setFilter({chartType: "NUMBER"})}}>Number Charts</button>
         <button onClick={()=>this.props.history.push(`/surveys`)}>Back To All Surveys</button>
       </div>
 
@@ -178,7 +156,5 @@ const MSTP = (state) => {
   return { chartType: state.chartType }
 }
 
-const mapDispatchToProps = {pie, bar, number}
 
-
-export default connect(MSTP, mapDispatchToProps)(Results)
+export default connect(MSTP, {setFilter})(Results)

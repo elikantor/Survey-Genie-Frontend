@@ -5,9 +5,9 @@ import {BrowserRouter} from 'react-router-dom'
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 import * as serviceWorker from './serviceWorker';
-import changeChartType from './components/reducers/changeChartType';
+import chartTypeFilter from './components/reducers/chartTypeFilter';
 
-const store = createStore(changeChartType, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const store = createStore(chartTypeFilter, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 
 ReactDOM.render(
