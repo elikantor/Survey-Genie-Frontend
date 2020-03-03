@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SurveyCards from './SurveyCard'
 import {NavLink} from 'react-router-dom'
-import { Menu, Card } from 'semantic-ui-react'
+import { Menu, Card, Image } from 'semantic-ui-react'
 import './profile.css'
 
 class Profile extends Component {
@@ -20,9 +20,9 @@ class Profile extends Component {
     return (
         <div className="profile">
             <h2>Welcome {user.username}!</h2>
-            <img src={`${user.image}`} alt="profile-pic"/>
-            <p>My interests: {user.interest}</p>
-            <p>Email: {user.email}</p>
+            <Image src={`${user.image}`} size='small'/>
+            <div>Interests: {user.interest}<br></br>
+            Email: {user.email}</div>
             <h3>My Surveys</h3>
             { this.showSurveys() }
             <br></br>

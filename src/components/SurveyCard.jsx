@@ -7,16 +7,6 @@ const test = '/images/wireframe/image.png'
 
 export default class SurveyCards extends Component{
 
-
-    // renderUser = (survey) => {
-    //     let creator = this.props.users.filter(user => user.id === survey.user_id)
-    //     return (
-    //         <div className="userinfo">
-    //             Created by: {creator[0].username} <img src={`${creator[0].image}`} alt="survey-pic"/>
-    //         </div>
-    //     )
-    // }
-
     render(){
         let {survey} = this.props
         let respondents = []

@@ -1,6 +1,11 @@
 import React from 'react';
 import {Switch, Route} from 'react-router'
 import {withRouter} from 'react-router-dom'
+
+// import {connect} from 'react-redux'
+// import {initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers} from './Redux/actions'
+
+//components
 import NavBar from './components/NavBar'
 import Home from './components/Home'
 import SurveyContainer from './components/SurveyContainer'
@@ -10,6 +15,7 @@ import Signup from './components/Signup'
 import Profile from './components/Profile'
 import CreateSurvey from './components/CreateSurvey'
 import Footer from './components/Footer'
+
 const userUrl = "http://localhost:3000/users"
 let surveyUrl = "http://localhost:3000/surveys"
 let answerUrl = "http://localhost:3000/answers"
@@ -83,6 +89,12 @@ class App extends React.Component{
         question.answers.map(answer=> answers.push(answer))
         return null
       })
+
+      // this.props.initializeUsers(data)
+      // this.props.initializeSurveys(surveys)
+      // this.props.initializeQuestions(questions)
+      // this.props.initializeAnswers(answers)
+
       this.setState({
           users: data,
           surveys: surveys,

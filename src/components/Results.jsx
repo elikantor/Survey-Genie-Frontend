@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import {setFilter} from './actions/actions'
 import {connect} from 'react-redux'
 import {Pie} from 'react-chartjs-2';
 import {Bar} from 'react-chartjs-2';
+import {setFilter} from '../Redux/actions'
 
 class Results extends Component{
 
@@ -131,6 +131,7 @@ class Results extends Component{
   }
 
   render(){
+    console.log(this.props)
     return(
       <div className="results-header">
         <h2>Survey: {this.props.survey.name}</h2>
@@ -153,7 +154,7 @@ class Results extends Component{
 }
 
 const MSTP = (state) => {
-  return { chartType: state.chartType }
+  return state.chartType 
 }
 
 
