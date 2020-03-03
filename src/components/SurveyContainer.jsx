@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import SurveyCards from './SurveyCard'
 import Survey from './Survey'
+import { Card } from 'semantic-ui-react'
 
 export default class SurveyContainer extends Component{
 
     showSurveys = () => {
-        return this.props.surveys.map(survey => <SurveyCards user={this.props.user} survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id} users={this.props.users}/>)
+        return( 
+            <Card.Group itemsPerRow={3}>
+                {this.props.surveys.map(survey => <SurveyCards user={this.props.user} survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id} users={this.props.users}/>)}
+            </Card.Group>
+        )
     }
 
     conditional = () => {

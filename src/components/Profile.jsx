@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import SurveyCards from './SurveyCard'
 import {NavLink} from 'react-router-dom'
-import { Menu } from 'semantic-ui-react'
+import { Menu, Card } from 'semantic-ui-react'
 import './profile.css'
 
 class Profile extends Component {
     
     showSurveys = () => {
         let surveys = this.props.surveys.filter(survey=> survey.user_id === this.props.user.id)
-        return surveys.map(survey => <SurveyCards user={this.props.user} token={this.props.token} deleteSurvey={this.props.deleteSurvey} key={survey.id} survey={survey} users={this.props.users}/>)
+        return (
+        <Card.Group itemsPerRow={3}>
+            {surveys.map(survey => <SurveyCards user={this.props.user} token={this.props.token} deleteSurvey={this.props.deleteSurvey} key={survey.id} survey={survey} users={this.props.users}/>)}
+        </Card.Group >
+        )
     }
 
   render() {
