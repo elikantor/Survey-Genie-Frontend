@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {Button, Form, Message} from 'semantic-ui-react'
+import './login.css'
 
 class Login extends Component {
 
@@ -23,14 +25,23 @@ class Login extends Component {
     let {username, password} = this.state
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit}>
         <h1>Login Form</h1>
-        <label htmlFor="username">Username:</label>
-        <input type="text" autoComplete="off" name="username" value={username} onChange={this.handleChange}/>
-        <label htmlFor="password">Password:</label>
-        <input type="password" autoComplete="off" name="password" value={password} onChange={this.handleChange}/>
-        <input type="submit" value="Submit"/>
-      </form>
+        <Form.Field>
+          <label htmlFor="username">Username:</label>
+          <input type="text" autoComplete="off" name="username" value={username} onChange={this.handleChange}/>
+        </Form.Field>
+        <Form.Field>
+          <label htmlFor="password">Password:</label>
+          <input type="password" autoComplete="off" name="password" value={password} onChange={this.handleChange}/>
+        </Form.Field>
+        <Message
+          error
+          header='Error'
+          content='Your username or password are incorrect.  Please try again.'
+        />
+        <Button type="submit" value="Submit">Submit</Button>
+      </Form>
     );
   }
 

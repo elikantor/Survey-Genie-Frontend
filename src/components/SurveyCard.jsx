@@ -17,27 +17,30 @@ export default class SurveyCards extends Component{
         let creator = this.props.users.filter(user => user.id === survey.user_id)
         
         return(
-                <Card raised image={test}>
-                    <Card.Content>
-                        <Image
-                            floated='right'
-                            size='mini'
-                            src={`${creator[0].image}`}
-                        />
-                        <Card.Header>{survey.name}</Card.Header>
-                        <Card.Meta>Created by: {creator[0].username}</Card.Meta>
-                    </Card.Content>
-                    <Card.Content extra>
-                        <div className='ui two buttons'>
-                        {!taken() ? <Button basic color='green'>
-                            <NavLink to={`/surveys/${survey.id}`}>Take Survey</NavLink>
-                        </Button> : "Response Submitted!"}
-                        <Button basic color='red'>
-                            <NavLink to={`/results/${survey.id}`}>See Results</NavLink>
-                        </Button>
-                        </div>
-                    </Card.Content>
-                </Card>
+            <Card raised image={test}>
+                <Card.Content>
+                    <Image
+                        floated='right'
+                        size='mini'
+                        src={`${creator[0].image}`}
+                    />
+                    <Card.Header>{survey.name}</Card.Header>
+                    <Card.Meta>Created by: {creator[0].username}</Card.Meta>
+                </Card.Content>
+                <Card.Content extra>
+                    <div className='ui buttons'>
+                    {!taken() ? <Button basic color='green'>
+                        <NavLink to={`/surveys/${survey.id}`}>Take Survey</NavLink>
+                    </Button> : "Response Submitted!"}
+                    <Button basic color='blue'>
+                        <NavLink to={`/results/${survey.id}`}>See Results</NavLink>
+                    </Button>
+                    {this.props.token? <Button basic color ='red' onClick={()=>this.props.deleteSurvey(survey.id)}> 
+                        Delete Survey
+                    </Button>: null}
+                    </div>
+                </Card.Content>
+            </Card>
         )
     }
 }

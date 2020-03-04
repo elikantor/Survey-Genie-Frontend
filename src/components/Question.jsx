@@ -24,7 +24,7 @@ export default class Question extends React.Component{
         return(
         <div className="question">
             Question
-            <textarea name="question" value={this.state.question} onChange={this.handleChange} />
+            <input name="question" value={this.state.question} onChange={this.handleChange} />
             <ul className="answers">
                 Answer 1: <input name="a1" value={this.state.a1} onChange={this.handleChange}/>
                 Answer 2: <input name="a2" value={this.state.a2} onChange={this.handleChange}/>

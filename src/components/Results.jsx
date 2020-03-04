@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
+import './results.css'
 import {Pie} from 'react-chartjs-2';
 import {Bar} from 'react-chartjs-2';
 import {setFilter} from '../Redux/actions'
@@ -48,7 +49,7 @@ class Results extends Component{
       }
       }
       return (
-        <div>
+        <div className="question">
           <Pie key={question.id} data={data} options={options} height={30} width={150}/>
           <br></br>
           <br></br>
@@ -98,7 +99,7 @@ class Results extends Component{
         ]
       }
       return (
-        <div>
+        <div className="question">
           <Bar data={data} type={type} height={30} width={150}/>
           <br></br>
           <br></br>
@@ -114,8 +115,8 @@ class Results extends Component{
     let form = []
     while (i < numOfQs){
       let question = (
-        <div>
-          <ul className="question">{this.props.survey.questions[i].content}
+        <div className="question">
+          <ul><strong>{this.props.survey.questions[i].content}</strong>
           <li>{this.props.survey.questions[i].answers[0].content} : {this.props.survey.questions[i].answers[0].total}</li>
           <li>{this.props.survey.questions[i].answers[1].content} : {this.props.survey.questions[i].answers[1].total}</li>
           <li>{this.props.survey.questions[i].answers[2].content} : {this.props.survey.questions[i].answers[2].total}</li>
@@ -131,7 +132,6 @@ class Results extends Component{
   }
 
   render(){
-    console.log(this.props)
     return(
       <div className="results-header">
         <h2>Survey: {this.props.survey.name}</h2>

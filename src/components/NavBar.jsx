@@ -27,8 +27,8 @@ export default class NavBar extends React.Component{
                 <NavLink to="/surveys">All Surveys</NavLink>
             </Menu.Item> : null }
             
-            {this.props.token ? <Menu.Item>
-            <button onClick={this.props.signout}>Sign Out</button>
+            {this.props.token ? <Menu.Item onClick={this.props.signout}>
+                Sign Out
             </Menu.Item> : null }
         </Menu>
         )

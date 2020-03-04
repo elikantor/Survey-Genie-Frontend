@@ -137,7 +137,8 @@ class App extends React.Component{
         this.setState({
           surveys: [...this.state.surveys, data],
           createdQuestions: [],
-          name: ""
+          name: "",
+          counter: 1
         }, () => {
           this.props.history.push(`/profile/${this.state.user.id}`)
         })
@@ -176,6 +177,14 @@ class App extends React.Component{
         counter: this.state.counter + 1,
         createdQuestions: [...this.state.createdQuestions, newQuestion]
     })
+  }
+
+  cancelSurvey = () => {
+    this.setState({
+      createdQuestions: [],
+      name: "",
+      counter: 1
+    }, () => this.props.history.push(`/profile/${this.state.user.id}`))
   }
 
   //Posts answers to backend and updates frontend
@@ -386,7 +395,7 @@ class App extends React.Component{
             <Route exact path="/surveys" render={(routerProps) => <SurveyContainer user={this.state.user} surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers} users={this.state.users} surveyResult={this.state.surveyResult} routerProps={routerProps}/> } />
             <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer user={this.state.user} surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers} users={this.state.users} surveyResult={this.state.surveyResult} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
             <Route path="/results/:id" render={(routerProps) => this.renderResults(routerProps) } />
-            <Route path="/createsurvey" render={() => <CreateSurvey name={this.state.name} questions={this.state.createdQuestions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleChange={this.handleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
+            <Route path="/createsurvey" render={() => <CreateSurvey cancel={this.cancelSurvey} name={this.state.name} questions={this.state.createdQuestions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleChange={this.handleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
             <Route render={ () => <p>Page not Found</p> } />
         </Switch>
         <Footer />

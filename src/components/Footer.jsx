@@ -1,10 +1,11 @@
 import React from 'react'
+import './footer.css'
 
 export default class Footer extends React.Component{
   
     render(){
         return(
-            <h5>Flatiron's Survey App - Created By Eli Kantor with React, Redux, Javascript, and Ruby on Rails</h5>
+            <h5> Created by Eli Kantor with React, Redux, Javascript, and Ruby on Rails</h5>
         )
       };
 }

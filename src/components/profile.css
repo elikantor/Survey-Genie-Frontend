@@ -1,8 +1,18 @@
-.profile-container{
+.profile{
     position: relative;
+    padding-top: 20px;
+    padding-right: 40px;
+    padding-bottom: 40px;
+    padding-left: 20px;
 }
 
 .profile-container img {
     height: auto;
     width: auto;
+}
+
+.profile-details {
+    font-size: 13px;
+    font-style: italic;
+    padding-top: 10px;
 }

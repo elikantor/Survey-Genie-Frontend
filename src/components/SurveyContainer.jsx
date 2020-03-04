@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import SurveyCards from './SurveyCard'
 import Survey from './Survey'
 import { Card } from 'semantic-ui-react'
+import './surveyContainer.css'
 
 export default class SurveyContainer extends Component{
 
@@ -17,6 +18,7 @@ export default class SurveyContainer extends Component{
         return(this.props.routerProps.match.params.id ? this.renderSurvey(this.props.routerProps.match.params.id) :
             <div className="survey-container">
                 <h1>All Surveys</h1>
+                <br></br>
                 {this.props.users[0] ? this.showSurveys() : null}
             </div>)
     }

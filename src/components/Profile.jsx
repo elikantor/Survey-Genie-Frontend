@@ -17,11 +17,12 @@ class Profile extends Component {
 
   render() {
       let {user} = this.props
+      
     return (
         <div className="profile">
             <h2>Welcome {user.username}!</h2>
             <Image src={`${user.image}`} size='small'/>
-            <div>Interests: {user.interest}<br></br>
+            <div className="profile-details">Interests: {user.interest}<br></br>
             Email: {user.email}</div>
             <h3>My Surveys</h3>
             { this.showSurveys() }
