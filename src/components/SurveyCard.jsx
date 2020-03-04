@@ -29,13 +29,13 @@ export default class SurveyCards extends Component{
                 </Card.Content>
                 <Card.Content extra>
                     <div className='ui buttons'>
-                    {!taken() ? <Button basic color='green'>
+                    {!taken() ? <Button style = {{width: '8vw'}} basic color='green'>
                         <NavLink to={`/surveys/${survey.id}`}>Take Survey</NavLink>
                     </Button> : "Response Submitted!"}
-                    <Button basic color='blue'>
+                    <Button basic color='blue' style = {{width: '8vw'}}>
                         <NavLink to={`/results/${survey.id}`}>See Results</NavLink>
                     </Button>
-                    {this.props.token? <Button basic color ='red' onClick={()=>this.props.deleteSurvey(survey.id)}> 
+                    {this.props.token? <Button style = {{width: '8vw'}} basic color ='red' onClick={()=>this.props.deleteSurvey(survey.id)}> 
                         Delete Survey
                     </Button>: null}
                     </div>
