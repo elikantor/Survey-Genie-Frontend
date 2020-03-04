@@ -116,13 +116,13 @@ class Results extends Component{
     while (i < numOfQs){
       let question = (
         <div className="question">
-          <ul><strong>{this.props.survey.questions[i].content}</strong>
+          <strong>{this.props.survey.questions[i].content}</strong>
           <li>{this.props.survey.questions[i].answers[0].content} : {this.props.survey.questions[i].answers[0].total}</li>
           <li>{this.props.survey.questions[i].answers[1].content} : {this.props.survey.questions[i].answers[1].total}</li>
           <li>{this.props.survey.questions[i].answers[2].content} : {this.props.survey.questions[i].answers[2].total}</li>
           <li>{this.props.survey.questions[i].answers[3].content} : {this.props.survey.questions[i].answers[3].total}</li>
           <li>{this.props.survey.questions[i].answers[4].content} : {this.props.survey.questions[i].answers[4].total}</li>
-          </ul>
+          <br></br>
         </div>
       )
       form.push(question)
