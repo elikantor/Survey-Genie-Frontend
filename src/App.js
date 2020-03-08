@@ -59,7 +59,7 @@ class App extends React.Component{
             user: data.user,
             token: data.token
           }, () => {
-            this.props.history.push("/profile")
+            this.props.history.push(`/profile/${this.state.user.id}`)
           })
         }
       })
