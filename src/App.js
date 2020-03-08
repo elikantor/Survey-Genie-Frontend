@@ -2,8 +2,8 @@ import React from 'react';
 import {Switch, Route} from 'react-router'
 import {withRouter} from 'react-router-dom'
 
-// import {connect} from 'react-redux'
-// import {initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers} from './Redux/actions'
+import {connect} from 'react-redux'
+import {addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers} from './Redux/actions'
 
 //components
 import NavBar from './components/NavBar'
@@ -25,10 +25,6 @@ let joinerUrl = "http://localhost:3000/user_survey_joiners"
 class App extends React.Component{
   
   state = {
-    users: [],
-    surveys: [],
-    questions: [],
-    answers: [],
     user: {
       username: "",
       interest: "",
@@ -90,17 +86,11 @@ class App extends React.Component{
         return null
       })
 
-      // this.props.initializeUsers(data)
-      // this.props.initializeSurveys(surveys)
-      // this.props.initializeQuestions(questions)
-      // this.props.initializeAnswers(answers)
+      this.props.initializeUsers({users: data})
+      this.props.initializeSurveys({surveys: surveys})
+      this.props.initializeQuestions({questions: questions})
+      this.props.initializeAnswers({answers: answers})
 
-      this.setState({
-          users: data,
-          surveys: surveys,
-          questions: questions,
-          answers: answers
-      })
     })
   }
 
@@ -134,14 +124,16 @@ class App extends React.Component{
     })
     .then(r=>r.json())
     .then(data => {
-        this.setState({
-          surveys: [...this.state.surveys, data],
-          createdQuestions: [],
-          name: "",
-          counter: 1
-        }, () => {
-          this.props.history.push(`/profile/${this.state.user.id}`)
-        })
+      console.log(data)
+      this.props.addSurvey(data)
+      this.setState({
+        createdQuestions: [],
+        name: "",
+        counter: 1
+      }, () => {
+        this.props.history.push(`/profile/${this.state.user.id}`)
+      })
+
     })
   }
 
@@ -234,7 +226,7 @@ class App extends React.Component{
     .then(r=>r.json())
     .then(data=> {
       survey.user_survey_joiners.push(data)
-      let newSurveys = this.state.surveys.filter(surveyObj=> surveyObj.id !== survey.id)
+      let newSurveys = this.props.surveys.filter(surveyObj=> surveyObj.id !== survey.id)
       newSurveys.push(survey)
       this.setState({
         surveys: newSurveys
@@ -356,12 +348,12 @@ class App extends React.Component{
 
 //renders User Profile after login or signup
   renderProfile = (routerProps) => {
-      return <Profile token={this.state.token} deleteSurvey={this.deleteSurvey} user={this.state.user} users={this.state.users} surveys={this.state.surveys} routerProps={routerProps} />
+      return <Profile token={this.state.token} deleteSurvey={this.deleteSurvey} user={this.state.user} routerProps={routerProps} />
   }
 
 // renders survey results
   renderResults = (routerProps) => {
-    let survey = this.state.surveys.find(survey => survey.id === parseInt(routerProps.match.params.id))
+    let survey = this.props.surveys.find(survey => survey.id === parseInt(routerProps.match.params.id))
     if (survey){
       return <Results survey={survey} {...routerProps} />
     } else {
@@ -375,10 +367,8 @@ class App extends React.Component{
     })
     .then(r=>r.json())
     .then(data=>{
-      let surveyArr = this.state.surveys.filter(survey=> survey.id !== surveyId)
-      this.setState({
-        surveys: surveyArr
-      })
+      let surveyArr = this.props.surveys.filter(survey=> survey.id !== surveyId)
+      this.props.initializeSurveys({surveys: surveyArr})
     })
     this.props.history.push(`/profile/${this.state.user.id}`)
   }
@@ -392,8 +382,8 @@ class App extends React.Component{
             <Route path="/login" render={ () => <Login handleSubmit={this.handleLoginSubmit} /> } />
             <Route path="/signup" render={ () => <Signup handleSubmit={this.handleSignupSubmit} /> } />
             <Route exact path="/profile/:id" render={(routerProps)=> this.renderProfile(routerProps) } />
-            <Route exact path="/surveys" render={(routerProps) => <SurveyContainer user={this.state.user} surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers} users={this.state.users} surveyResult={this.state.surveyResult} routerProps={routerProps}/> } />
-            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer user={this.state.user} surveys={this.state.surveys} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers} users={this.state.users} surveyResult={this.state.surveyResult} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
+            <Route exact path="/surveys" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers}  surveyResult={this.state.surveyResult} routerProps={routerProps}/> } />
+            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers} surveyResult={this.state.surveyResult} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
             <Route path="/results/:id" render={(routerProps) => this.renderResults(routerProps) } />
             <Route path="/createsurvey" render={() => <CreateSurvey cancel={this.cancelSurvey} name={this.state.name} questions={this.state.createdQuestions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleChange={this.handleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
             <Route render={ () => <p>Page not Found</p> } />
@@ -404,4 +394,8 @@ class App extends React.Component{
   }
 }
 
-export default withRouter(App)
+const MSTP = (state) => {
+  return {surveys: state.dataReducer.surveys}
+}
+
+export default connect(MSTP, {addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers})(withRouter(App))

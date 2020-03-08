@@ -13,6 +13,7 @@ export const initializeUsers = (users) => {
 }
 
 export const initializeSurveys = (surveys) => { 
+    // debugger
     return { 
         type: "INITIALIZE_SURVEYS", 
         payload: surveys
@@ -30,5 +31,12 @@ export const initializeAnswers = (answers) => {
     return { 
         type: "INITIALIZE_ANSWERS", 
         payload: answers
+    }
+}
+
+export const addSurvey = (survey) => { 
+    return { 
+        type: "ADD_SURVEY", 
+        payload: survey
     }
 }

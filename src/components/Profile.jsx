@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import SurveyCards from './SurveyCard'
+import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
+import SurveyCards from './SurveyCard'
 import { Menu, Card, Image } from 'semantic-ui-react'
 import './profile.css'
 
@@ -38,4 +39,8 @@ class Profile extends Component {
 
 }
 
-export default Profile;
+const MSTP = (state) => {
+    return {surveys: state.dataReducer.surveys} 
+}
+
+export default connect(MSTP)(Profile);

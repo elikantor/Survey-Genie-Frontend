@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import SurveyCards from './SurveyCard'
 import Survey from './Survey'
+import {connect} from 'react-redux'
 import { Card } from 'semantic-ui-react'
 import './surveyContainer.css'
 
-export default class SurveyContainer extends Component{
+class SurveyContainer extends Component{
 
     showSurveys = () => {
         return( 
             <Card.Group itemsPerRow={3}>
-                {this.props.surveys.map(survey => <SurveyCards user={this.props.user} survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id} users={this.props.users}/>)}
+                {this.props.surveys.map(survey => <SurveyCards user={this.props.user} survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id}/>)}
             </Card.Group>
         )
     }
@@ -42,3 +43,12 @@ export default class SurveyContainer extends Component{
         )
     }
 }
+
+const MSTP = (state) => {
+    return {
+        users: state.dataReducer.users,
+        surveys: state.dataReducer.surveys
+    } 
+}
+
+export default connect(MSTP)(SurveyContainer)

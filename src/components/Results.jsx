@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import './results.css'
+import {setFilter} from '../Redux/actions'
 import {Pie} from 'react-chartjs-2';
 import {Bar} from 'react-chartjs-2';
-import {setFilter} from '../Redux/actions'
+import './results.css'
 
 class Results extends Component{
 
@@ -132,6 +132,7 @@ class Results extends Component{
   }
 
   render(){
+    console.log(this.props)
     return(
       <div className="results-header">
         <h2>Survey: {this.props.survey.name}</h2>
