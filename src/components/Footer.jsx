@@ -5,7 +5,14 @@ export default class Footer extends React.Component{
   
     render(){
         return(
-            <h5> Created by Eli Kantor with React, Redux, Javascript, Chart JS, CSS, HTML, Semantic UI React, Ruby on Rails, ActionMailer, JWT, BCrypt</h5>
+            <div>
+            <br></br>
+            <div>
+            <p> Created by Eli Kantor <br></br> 
+            Front-end: React, Redux, Javascript, Chart JS, CSS, HTML, Semantic UI React, React Router<br></br>
+            Back-end: Ruby on Rails, ActionMailer, JWT, BCrypt, PostgreSQL</p>
+            </div>
+            </div>
         )
       };
 }

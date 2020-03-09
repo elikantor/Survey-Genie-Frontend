@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import SurveyCards from './SurveyCard'
 import Survey from './Survey'
 import {connect} from 'react-redux'
-import { Card } from 'semantic-ui-react'
+import { Card, Input } from 'semantic-ui-react'
 import './surveyContainer.css'
 
 class SurveyContainer extends Component{
@@ -18,7 +18,7 @@ class SurveyContainer extends Component{
     }
 
     showSurveys = () => {
-        let titleFilter = this.props.surveys.filter(survey=> survey.name.toLowerCase().includes(this.state.title))
+        let titleFilter = this.props.surveys.filter(survey=> survey.name.toLowerCase().includes(this.state.title.toLowerCase()))
 
         return(
             this.state.title === "" ?
@@ -37,9 +37,11 @@ class SurveyContainer extends Component{
         return(this.props.routerProps.match.params.id ? this.renderSurvey(this.props.routerProps.match.params.id) :
             <div className="survey-container">
                 <h1>All Surveys</h1>
+                <Input placeholder="Search by title..." type="text" autoComplete="off" name="title" value={title} onChange={this.handleChange}/>
                 <br></br>
-                <p>Filter Surveys by Title</p><input type="text" autoComplete="off" name="title" value={title} onChange={this.handleChange}/>
-                {this.props.users[0] ? this.showSurveys() : null}
+                <div className="survey-cards">
+                    {this.showSurveys()}
+                </div>
             </div>)
     }
 
