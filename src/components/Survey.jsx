@@ -28,7 +28,7 @@ export default class Survey extends React.Component{
   render(){
       let {creator, user, survey} = this.props
       return(
-        <form className="survey" onSubmit={(e)=>this.props.submitAnswers(this.props.surveyResult, survey, user, e)}>
+        <form className="survey" onSubmit={(e)=>this.props.submitAnswers(survey, user, e)}>
           <div className="survey-header">
             <h2>Survey: {survey.name}</h2>
             <h3>Created by: {creator.username}</h3>
