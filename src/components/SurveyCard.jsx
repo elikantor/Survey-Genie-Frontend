@@ -1,10 +1,30 @@
 import React, { Component } from 'react'
-import { Grid, Button, Card, Image } from 'semantic-ui-react'
+import { Grid, Button, Card, Image, Icon } from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
 const test = '/images/wireframe/image.png'
 
 class SurveyCards extends Component{
+
+    state = {
+        favorite: false,
+        color: "black"
+    }
+
+    handleFavorite = () => {
+        let newState = () => {
+            if(this.state.color==="black"){
+                return "red"
+            } else {
+                return "black"
+            }
+        }
+
+        this.setState({
+            favorite: !this.state.favorite,
+            color: newState()
+        })
+    }
 
     render(){
         let {survey, user} = this.props
@@ -19,13 +39,10 @@ class SurveyCards extends Component{
         return(
             <Card raised image={test}>
                 <Card.Content>
-                    <Image
-                        floated='right'
-                        size='mini'
-                        src={`${creator[0].image}`}
-                    />
+                    <Image floated='right' size='mini' src={`${creator[0].image}`}/>
                     <Card.Header>{survey.name}</Card.Header>
                     <Card.Meta>Created by: {creator[0].username}</Card.Meta>
+                    <Icon name='heart' onClick={this.handleFavorite} color={this.state.color}/>
                 </Card.Content>
                 <Grid textAlign='center' columns={3}>
                     <Grid.Column>

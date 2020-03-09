@@ -30,6 +30,10 @@ export default class NavBar extends React.Component{
             {this.props.token ? <Menu.Item> 
                 <NavLink to="/surveys">All Surveys</NavLink>
             </Menu.Item> : null }
+
+            {this.props.token ? <Menu.Item> 
+                <NavLink to="/favorites">Favorites</NavLink>
+            </Menu.Item> : null }
             
             {this.props.token ? <Menu.Item onClick={this.props.signout}>
                 Sign Out
