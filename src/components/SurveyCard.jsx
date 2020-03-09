@@ -1,48 +1,66 @@
 import React, { Component } from 'react'
 import { Grid, Button, Card, Image, Icon } from 'semantic-ui-react'
 import {connect} from 'react-redux'
+import {favorite, unfavorite} from '../Redux/actions'
 import {NavLink} from 'react-router-dom'
 const test = '/images/wireframe/image.png'
+let favoriteUrl = "http://localhost:3000/favorites"
 
 class SurveyCards extends Component{
 
-    state = {
-        favorite: false,
-        color: "black"
-    }
 
-    handleFavorite = () => {
-        let newState = () => {
-            if(this.state.color==="black"){
-                return "red"
-            } else {
-                return "black"
-            }
+    handleFavorite = (surveyId, userId, favoriteObj) => {
+        let {survey, user} = this.props
+        let fav = survey.favorites.filter(f=> f.user_id===user.id)
+        console.log(fav)
+        if(fav.length===0){
+            fetch(`${favoriteUrl}`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    survey_id: surveyId
+                })
+            })
+            .then(r=>r.json())
+            .then(favoriteObj=> {
+                this.props.favorite(favoriteObj)
+            })
+        } else {
+            fetch(`${favoriteUrl}/${favoriteObj.id}`, {
+                method: "DELETE"
+            })
+            .then(r=>r.json())
+            .then(emptyResponse => {
+                let newFavorites = this.props.favorites.filter(favs=> favs.id!==favoriteObj.id)
+                this.props.unfavorite(newFavorites)
+            })
         }
-
-        this.setState({
-            favorite: !this.state.favorite,
-            color: newState()
-        })
     }
 
     render(){
-        let {survey, user} = this.props
+        console.log(this.props)
+        let {survey, user, users} = this.props
         let respondents = []
         if(survey.user_survey_joiners.length > 0){
             survey.user_survey_joiners.map(joiner => respondents.push(joiner.user_id))
         }
         let taken = () => respondents.includes(user.id)
-        let creator = this.props.users.filter(user => user.id === survey.user_id)
+        let creator = users.filter(user => user.id === survey.user_id)
         let owner = () => survey.user_id === user.id
-        
+        let fav = this.props.survey.favorites.filter(f=> f.user_id===user.id)
+        console.log(fav)
         return(
             <Card raised image={test}>
                 <Card.Content>
                     <Image floated='right' size='mini' src={`${creator[0].image}`}/>
                     <Card.Header>{survey.name}</Card.Header>
                     <Card.Meta>Created by: {creator[0].username}</Card.Meta>
-                    <Icon name='heart' onClick={this.handleFavorite} color={this.state.color}/>
+                    {fav.length===1 ? 
+                        <Icon name='heart' onClick={()=>this.handleFavorite(survey.id, user.id, fav)} color="red"/>:
+                        <Icon name='heart' onClick={()=>this.handleFavorite(survey.id, user.id, fav)} color="black"/>}                 
                 </Card.Content>
                 <Grid textAlign='center' columns={3}>
                     <Grid.Column>
@@ -69,8 +87,9 @@ class SurveyCards extends Component{
 const MSTP = (state) => {
     return {
         surveys: state.dataReducer.surveys,
-        users: state.dataReducer.users
+        users: state.dataReducer.users,
+        favorites: state.dataReducer.favorites
     } 
 }
 
-export default connect(MSTP)(SurveyCards)
+export default connect(MSTP, {favorite, unfavorite})(SurveyCards)

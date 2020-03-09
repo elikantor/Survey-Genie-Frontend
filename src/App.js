@@ -3,7 +3,7 @@ import {Switch, Route} from 'react-router'
 import {withRouter} from 'react-router-dom'
 
 import {connect} from 'react-redux'
-import {addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers} from './Redux/actions'
+import {initializeFavorites, addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers} from './Redux/actions'
 
 //components
 import NavBar from './components/NavBar'
@@ -75,8 +75,13 @@ class App extends React.Component{
         }
         return null
       })
+      
       let questions = []
+      let favorites = []
       surveys.map(survey => {
+          if(survey.favorites.length > 0){
+            survey.favorites.map(favorite=> favorites.push(favorite))
+          }
           survey.questions.map(question=> questions.push(question))
           return null
       })
@@ -88,6 +93,7 @@ class App extends React.Component{
 
       this.props.initializeUsers({users: data})
       this.props.initializeSurveys({surveys: surveys})
+      this.props.initializeFavorites({favorites: favorites})
       this.props.initializeQuestions({questions: questions})
       this.props.initializeAnswers({answers: answers})
 
@@ -402,4 +408,4 @@ const MSTP = (state) => {
   return {surveys: state.dataReducer.surveys}
 }
 
-export default connect(MSTP, {addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers})(withRouter(App))
+export default connect(MSTP, {initializeFavorites, addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers})(withRouter(App))

@@ -5,6 +5,7 @@ import {createStore, combineReducers} from 'redux'
 import {Provider} from 'react-redux'
 import chartTypeFilter from './Redux/reducers/chartTypeFilter';
 import dataReducer from './Redux/reducers/dataReducer'
+import favoriteReducer from './Redux/reducers/favoriteReducer'
 import App from './App';
 // import * as serviceWorker from './serviceWorker';
 
@@ -12,7 +13,8 @@ import App from './App';
 const rootReducer = combineReducers(
     {
         chartType: chartTypeFilter,
-        dataReducer: dataReducer
+        dataReducer: dataReducer,
+        favoriteReducer: favoriteReducer
     }
 )
 

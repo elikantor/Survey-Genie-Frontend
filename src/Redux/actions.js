@@ -40,3 +40,24 @@ export const addSurvey = (survey) => {
         payload: survey
     }
 }
+
+export const initializeFavorites = (favorites) => { 
+    return { 
+        type: "INITIALIZE_FAVORITES", 
+        payload: favorites
+    }
+}
+
+export const favorite = (favorite) => { 
+    return { 
+        type: "ADD_FAVORITE", 
+        payload: favorite
+    }
+}
+
+export const unfavorite = (favorite) => { 
+    return { 
+        type: "REMOVE_FAVORITE", 
+        payload: favorite
+    }
+}
