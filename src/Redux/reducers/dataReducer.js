@@ -16,13 +16,15 @@ const dataReducer = (state = initialState, action) => {
         return {...state, questions: action.payload.questions}
       case "INITIALIZE_ANSWERS":
         return {...state, answers: action.payload.answers}
-      case "INITIALIZE_FAVORITES":
-        return {...state, favorites: action.payload.favorites}
       case "ADD_SURVEY":
         let newSurvey = action.payload
         let newArray = [...state.surveys, newSurvey]
         return {...state, surveys: newArray}
-    
+      case "ADD_USER":
+        let newUser = action.payload
+        let newState = [...state.users, newUser]
+        return {...state, users: newState}
+
       default: {
         return state;
       }

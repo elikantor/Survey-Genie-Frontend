@@ -3,7 +3,7 @@ import {Switch, Route} from 'react-router'
 import {withRouter} from 'react-router-dom'
 
 import {connect} from 'react-redux'
-import {initializeFavorites, addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers} from './Redux/actions'
+import {initializeFavorites, addUser, addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers} from './Redux/actions'
 
 //components
 import NavBar from './components/NavBar'
@@ -15,6 +15,7 @@ import Signup from './components/Signup'
 import Profile from './components/Profile'
 import CreateSurvey from './components/CreateSurvey'
 import Footer from './components/Footer'
+import Favorites from './components/Favorites'
 
 const userUrl = "http://localhost:3000/users"
 let surveyUrl = "http://localhost:3000/surveys"
@@ -337,8 +338,8 @@ class App extends React.Component{
     .then(data => {
       if (!data.error) {
         localStorage.setItem("token", data.token)
+        this.props.addUser(data.user)
         this.setState({
-          users: [...this.state.users, data.user],
           user: data.user,
           token: data.token
         }, () => {
@@ -392,6 +393,7 @@ class App extends React.Component{
             <Route path="/login" render={ () => <Login handleSubmit={this.handleLoginSubmit} /> } />
             <Route path="/signup" render={ () => <Signup handleSubmit={this.handleSignupSubmit} /> } />
             <Route exact path="/profile/:id" render={(routerProps)=> this.renderProfile(routerProps) } />
+            <Route path="/favorites" render={ (routerProps) => <Favorites user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers}  routerProps={routerProps}/> } />
             <Route exact path="/surveys" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers}  routerProps={routerProps}/> } />
             <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
             <Route path="/results/:id" render={(routerProps) => this.renderResults(routerProps) } />
@@ -408,4 +410,4 @@ const MSTP = (state) => {
   return {surveys: state.dataReducer.surveys}
 }
 
-export default connect(MSTP, {initializeFavorites, addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers})(withRouter(App))
+export default connect(MSTP, {initializeFavorites, addUser, addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers})(withRouter(App))

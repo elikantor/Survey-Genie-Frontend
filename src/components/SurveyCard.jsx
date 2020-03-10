@@ -8,12 +8,10 @@ let favoriteUrl = "http://localhost:3000/favorites"
 
 class SurveyCards extends Component{
 
-
-    handleFavorite = (surveyId, userId, favoriteObj) => {
-        let {survey, user} = this.props
-        let fav = survey.favorites.filter(f=> f.user_id===user.id)
-        console.log(fav)
-        if(fav.length===0){
+    handleFavorite = (surveyId, userId, favoriteObj=null) => {
+        let {favorites} = this.props
+        let fav = favorites.find(f=> f.user_id===userId&&f.survey_id===surveyId)
+        if(!fav){
             fetch(`${favoriteUrl}`, {
                 method: "POST",
                 headers: {
@@ -34,15 +32,13 @@ class SurveyCards extends Component{
             })
             .then(r=>r.json())
             .then(emptyResponse => {
-                let newFavorites = this.props.favorites.filter(favs=> favs.id!==favoriteObj.id)
-                this.props.unfavorite(newFavorites)
+                this.props.unfavorite(favoriteObj)
             })
         }
     }
 
     render(){
-        console.log(this.props)
-        let {survey, user, users} = this.props
+        let {survey, user, users, favorites} = this.props
         let respondents = []
         if(survey.user_survey_joiners.length > 0){
             survey.user_survey_joiners.map(joiner => respondents.push(joiner.user_id))
@@ -50,17 +46,16 @@ class SurveyCards extends Component{
         let taken = () => respondents.includes(user.id)
         let creator = users.filter(user => user.id === survey.user_id)
         let owner = () => survey.user_id === user.id
-        let fav = this.props.survey.favorites.filter(f=> f.user_id===user.id)
-        console.log(fav)
+        let fav = favorites.find(f=> (f.user_id===user.id&&f.survey_id===survey.id))
         return(
             <Card raised image={test}>
                 <Card.Content>
                     <Image floated='right' size='mini' src={`${creator[0].image}`}/>
                     <Card.Header>{survey.name}</Card.Header>
                     <Card.Meta>Created by: {creator[0].username}</Card.Meta>
-                    {fav.length===1 ? 
+                    {fav? 
                         <Icon name='heart' onClick={()=>this.handleFavorite(survey.id, user.id, fav)} color="red"/>:
-                        <Icon name='heart' onClick={()=>this.handleFavorite(survey.id, user.id, fav)} color="black"/>}                 
+                        <Icon name='heart' onClick={()=>this.handleFavorite(survey.id, user.id)} color="black"/>}                 
                 </Card.Content>
                 <Grid textAlign='center' columns={3}>
                     <Grid.Column>
@@ -88,7 +83,7 @@ const MSTP = (state) => {
     return {
         surveys: state.dataReducer.surveys,
         users: state.dataReducer.users,
-        favorites: state.dataReducer.favorites
+        favorites: state.favoriteReducer.favorites
     } 
 }
 

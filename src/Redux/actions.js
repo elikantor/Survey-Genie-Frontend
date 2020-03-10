@@ -41,6 +41,13 @@ export const addSurvey = (survey) => {
     }
 }
 
+export const addUser = (user) => { 
+    return { 
+        type: "ADD_USER", 
+        payload: user
+    }
+}
+
 export const initializeFavorites = (favorites) => { 
     return { 
         type: "INITIALIZE_FAVORITES", 
@@ -57,7 +64,7 @@ export const favorite = (favorite) => {
 
 export const unfavorite = (favorite) => { 
     return { 
-        type: "REMOVE_FAVORITE", 
+        type: "DELETE_FAVORITE", 
         payload: favorite
     }
 }

@@ -11,14 +11,13 @@ class Profile extends Component {
         let surveys = this.props.surveys.filter(survey=> survey.user_id === this.props.user.id)
         return (
         <Card.Group itemsPerRow={3}>
-            {surveys.map(survey => <SurveyCards user={this.props.user} token={this.props.token} deleteSurvey={this.props.deleteSurvey} key={survey.id} survey={survey} users={this.props.users}/>)}
+            {surveys.map(survey => <SurveyCards user={this.props.user} token={this.props.token} deleteSurvey={this.props.deleteSurvey} key={survey.id} survey={survey}/>)}
         </Card.Group >
         )
     }
 
   render() {
       let {user} = this.props
-      
     return (
         <div className="profile">
             <h2>Welcome {user.username}!</h2>
