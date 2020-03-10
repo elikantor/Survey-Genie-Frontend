@@ -24,10 +24,15 @@ class Favorites extends Component {
     }
 
   render() {
+    let userFavorites = this.props.favorites.filter(fav=> fav.user_id===this.props.user.id)
     return (
         <div className="profile">
             <h3>{this.props.user.username}'s Favorite Surveys</h3>
-            { this.showFavorites() }
+            { userFavorites.length>0 ? this.showFavorites() :
+            <div>
+                <br></br>
+                <p> No surveys have been favorited! </p>
+            </div> }
         </div>
     )
   }
