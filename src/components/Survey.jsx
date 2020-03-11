@@ -9,14 +9,14 @@ export default class Survey extends React.Component{
     let form = []
     while (i < numOfQs){
       let question = (
-        <div>
-          <ul className="question" >{survey.questions[i].content}
+        <div className="question">
+          <strong>{survey.questions[i].content}</strong>
           <li>{survey.questions[i].answers[0].content} <input name={survey.questions[i].content} value={survey.questions[i].answers[0].content} onChange={(event)=>this.props.saveAnswer(this.props.survey.questions, event)} type="checkbox" checked={this.props.checkbox_answers.includes(this.props.survey.questions[i].answers[0].content)}/></li>
           <li>{survey.questions[i].answers[1].content} <input name={survey.questions[i].content} value={survey.questions[i].answers[1].content} onChange={(event)=>this.props.saveAnswer(this.props.survey.questions, event)} type="checkbox" checked={this.props.checkbox_answers.includes(this.props.survey.questions[i].answers[1].content)}/></li>
           <li>{survey.questions[i].answers[2].content} <input name={survey.questions[i].content} value={survey.questions[i].answers[2].content} onChange={(event)=>this.props.saveAnswer(this.props.survey.questions, event)} type="checkbox" checked={this.props.checkbox_answers.includes(this.props.survey.questions[i].answers[2].content)}/></li>
           <li>{survey.questions[i].answers[3].content} <input name={survey.questions[i].content} value={survey.questions[i].answers[3].content} onChange={(event)=>this.props.saveAnswer(this.props.survey.questions, event)} type="checkbox" checked={this.props.checkbox_answers.includes(this.props.survey.questions[i].answers[3].content)}/></li>
           <li>{survey.questions[i].answers[4].content} <input name={survey.questions[i].content} value={survey.questions[i].answers[4].content} onChange={(event)=>this.props.saveAnswer(this.props.survey.questions, event)} type="checkbox" checked={this.props.checkbox_answers.includes(this.props.survey.questions[i].answers[4].content)}/></li>
-          </ul>
+          <br></br>
         </div>
       )
       form.push(question)
