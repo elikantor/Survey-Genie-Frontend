@@ -46,7 +46,7 @@ class App extends React.Component{
     if (localStorage.getItem("token")) {
       let token = localStorage.getItem("token")
 
-      fetch("http://localhost:3000/persist", {
+      fetch("https://survey-genie-api.herokuapp.com/persist", {
         headers: {
           "Authorization": `bearer ${token}`
         }
