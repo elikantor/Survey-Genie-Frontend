@@ -17,10 +17,10 @@ import CreateSurvey from './components/CreateSurvey'
 import Footer from './components/Footer'
 import Favorites from './components/Favorites'
 
-const userUrl = "http://localhost:3000/users"
-let surveyUrl = "http://localhost:3000/surveys"
-let answerUrl = "http://localhost:3000/answers"
-let joinerUrl = "http://localhost:3000/user_survey_joiners"
+const userUrl = "https://survey-genie-backend.herokuapp.com/users"
+let surveyUrl = "https://survey-genie-backend.herokuapp.com/surveys"
+let answerUrl = "https://survey-genie-backend.herokuapp.com/answers"
+let joinerUrl = "https://survey-genie-backend.herokuapp.com/user_survey_joiners"
 
 
 class App extends React.Component{

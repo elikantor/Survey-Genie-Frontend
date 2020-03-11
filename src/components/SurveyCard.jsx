@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {favorite, unfavorite} from '../Redux/actions'
 import {NavLink} from 'react-router-dom'
 const test = '/images/wireframe/image.png'
-let favoriteUrl = "http://localhost:3000/favorites"
+let favoriteUrl = "https://survey-genie-backend.herokuapp.com/favorites"
 
 class SurveyCards extends Component{
 
