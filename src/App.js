@@ -22,7 +22,6 @@ let surveyUrl = "https://survey-genie-api.herokuapp.com/surveys"
 let answerUrl = "https://survey-genie-api.herokuapp.com/answers"
 let joinerUrl = "https://survey-genie-api.herokuapp.com/user_survey_joiners"
 
-
 class App extends React.Component{
   
   state = {
@@ -300,7 +299,7 @@ class App extends React.Component{
 
 //login
   handleLoginSubmit = (userInfo) => {
-    fetch("http://localhost:3000/login", {
+    fetch("https://survey-genie-api.herokuapp.com/login", {
       method: "POST",
       headers: {
         "content-type": "application/json"
@@ -325,7 +324,7 @@ class App extends React.Component{
 
 //signup
   handleSignupSubmit = (userInfo) => {
-    fetch("http://localhost:3000/users", {
+    fetch("https://survey-genie-api.herokuapp.com/users", {
       method: "POST",
       headers: {
         "content-type": "application/json"
