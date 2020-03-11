@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import SurveyCards from './SurveyCard'
 import Survey from './Survey'
 import {connect} from 'react-redux'
-import { Card, Input } from 'semantic-ui-react'
+import { Card, Input, Radio } from 'semantic-ui-react'
 import './surveyContainer.css'
 
 class SurveyContainer extends Component{
 
     state = {
-        title: ""
+        title: "",
+        responded: false
     }
 
     handleChange = (e) => {
@@ -17,17 +18,45 @@ class SurveyContainer extends Component{
         })
     }
 
+    showTaken = () => {
+        this.setState({
+            responded: !this.state.responded
+        })
+    }
+
     showSurveys = () => {
-        let titleFilter = this.props.surveys.filter(survey=> survey.name.toLowerCase().includes(this.state.title.toLowerCase()))
+        let {surveys, user} = this.props
+        let titleFilter = surveys.filter(survey=> survey.name.toLowerCase().includes(this.state.title.toLowerCase()))
+        let takenSurveyIds = []
+
+        surveys.map(survey=> survey.user_survey_joiners.map(joiner=>{
+            if(joiner.user_id===user.id){
+                takenSurveyIds.push(joiner.survey_id)
+            }
+            return null
+        }))
+
+        let takenSurveys = surveys.filter(survey=> takenSurveyIds.includes(survey.id))
+        let titleAndTakenFilter = takenSurveys.filter(survey=> survey.name.toLowerCase().includes(this.state.title.toLowerCase()))
 
         return(
-            this.state.title === "" ?
+            this.state.title === "" && !this.state.responded ?
             <Card.Group itemsPerRow={3}>
                 {this.props.surveys.map(survey => <SurveyCards user={this.props.user} survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id}/>)}
             </Card.Group>
             :
+            !this.state.responded ?
             <Card.Group itemsPerRow={3}>
                 {titleFilter.map(survey => <SurveyCards user={this.props.user} survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id}/>)}
+            </Card.Group>
+            :
+            this.state.title !== "" ?
+            <Card.Group itemsPerRow={3}>
+                {titleAndTakenFilter.map(survey => <SurveyCards user={this.props.user} survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id}/>)}
+            </Card.Group>
+            :
+            <Card.Group itemsPerRow={3}>
+                {takenSurveys.map(survey => <SurveyCards user={this.props.user} survey={survey} deleteSurvey={this.props.deleteSurvey} key={survey.id}/>)}
             </Card.Group>
         )
     }
@@ -37,7 +66,10 @@ class SurveyContainer extends Component{
         return(this.props.routerProps.match.params.id ? this.renderSurvey(this.props.routerProps.match.params.id) :
             <div className="survey-container">
                 <h1>All Surveys</h1>
-                <Input placeholder="Search by title..." type="text" autoComplete="off" name="title" value={title} onChange={this.handleChange}/>
+                <div className='input'>
+                    <Input placeholder="Filter by title..." type="text" autoComplete="off" name="title" value={title} onChange={this.handleChange}/><br></br>
+                </div>
+                <Radio label="Show Only Surveys I've Taken" checked={this.state.responded} onClick={this.showTaken}/>
                 <br></br>
                 <div className="survey-cards">
                     {this.showSurveys()}

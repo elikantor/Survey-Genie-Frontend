@@ -20,7 +20,7 @@ class Profile extends Component {
       let {user} = this.props
     return (
         <div className="profile">
-            <h2>Welcome {user.username}!</h2>
+            <h1>Welcome {user.username}!</h1>
             <Image src={`${user.image}`} size='small'/>
             <div className="profile-details">Interests: {user.interest}<br></br>
             Email: {user.email}</div>
