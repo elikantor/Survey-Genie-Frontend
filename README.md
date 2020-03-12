@@ -27,15 +27,22 @@
 <li>Semantic UI React</li>
 
 <h3>Installing</h3>
+<h5>Backend</h5>
 <h7>Clone the backend repo and run the rails server by:</h7>
-<li>git clone git@github.com:elikantor/Survey-Genie-Frontend.git</li>
+<li>git clone git@github.com:elikantor/Survey-Genie-Backend.git</li>
+<li>cd Survey-Genie-Backend</li>
 <li>bundle install</li>
 <li>rails db:create</li>
 <li>rails db:migrate</li>
 <li>rails db:seed</li>
 <li>rails s</li>
 
-
+<h5>Frontend</h5>
+<h7>Clone the frontend repo</h7>
+<li>git clone git@github.com:elikantor/Survey-Genie-Frontend.git</li>
+<li>cd Survey-Genie-Frontend</li>
+<li>npm install & npm start</li>
+Reply "y" when asked "Would you like to run the app on another port instead?"
 
 ## Available Scripts
 
