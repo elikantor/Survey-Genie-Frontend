@@ -1,4 +1,44 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h3> This project has been deployed at https://survey-genie-frontend.herokuapp.com/.  The backend code is accessible in a seperate repo at https://github.com/elikantor/Survey-Genie-Backend <h3>
+
+<h1>Survey Genie<h1>
+<p>A survey tool.  Create, respond to, favorite, and view the results of surveys.</p>
+
+<h3>Usage and Features</h3>
+<p>Survey Genie streamlines the survey creation process through a user-friendly UI enabling users to create customized surveys that can vary in length and topic.</p>
+<li>Create a survey that can vary in length.  Surveys can only be deleted by the survey's creator</li>
+<li>Take any survey created on the platform and view the results in a variety of different formats<li>
+<li>Favorite a survey to track specific surveys of interest</li>
+<li>Filter through surveys by title or by those that the user has taken</li>
+
+<h3>Prerequisites</h3>
+<h4>Backend</h4>
+<li>Rails 5<li>
+<li>Bcrypt<li>
+<li>ActiveModelSerializers<li>
+<li>ActionMailer<li>
+<li>PostgresQL<li>
+
+<h4>Frontend</h4>
+<li>React<li>
+<li>Redux<li>
+<li>React Router<li>
+<li>Chart.js<li>
+<li>Semantic UI React</li>
+
+<h3>Installing</h3>
+<p>Clone the backend repo and run the rails server by:</p>
+<li>git clone git@github.com:elikantor/Survey-Genie-Frontend.git</li>
+<li>bundle install</li>
+
+<p>Set up the database</p>
+<li>rails db:create</li>
+<li>rails db:migrate</li>
+<li>rails db:seed</li>
+
+<p>Run the server</p>
+<li>rails s</li>
+
+
 
 ## Available Scripts
 
