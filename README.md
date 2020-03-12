@@ -44,9 +44,6 @@
 <li>npm install & npm start</li>
 <li>Reply "y" when asked "Would you like to run the app on another port instead?"</li>
 
-
-
-
 ## Available Scripts
 
 In the project directory, you can run:
