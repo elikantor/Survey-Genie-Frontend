@@ -38,11 +38,11 @@
 <li>rails s</li>
 
 <h5>Frontend</h5>
-<h7>Clone the frontend repo</h7>
+<h7>Clone the frontend repo and start the frontend server</h7>
 <li>git clone git@github.com:elikantor/Survey-Genie-Frontend.git</li>
 <li>cd Survey-Genie-Frontend</li>
 <li>npm install & npm start</li>
-Reply "y" when asked "Would you like to run the app on another port instead?"
+<li>Reply "y" when asked "Would you like to run the app on another port instead?"</li>
 
 ## Available Scripts
 
