@@ -18,6 +18,7 @@
 <li>ActiveModelSerializers</li>
 <li>ActionMailer</li>
 <li>PostgresQL</li>
+<br></br>
 
 <p>Frontend</p>
 <li>React</li>
