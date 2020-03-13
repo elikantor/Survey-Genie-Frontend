@@ -8,10 +8,10 @@ export default class Footer extends React.Component{
             <div>
             <br></br>
             <div>
-            <p> Created by Eli Kantor <br></br> 
-            Front-end: React, Redux, Javascript, Chart JS, CSS, HTML, Semantic UI React, React Router<br></br>
+            <strong><p> Created by Eli Kantor</p> </strong>
+            <i>Front-end: React, Redux, Javascript, Chart JS, CSS, HTML, Semantic UI React, React Router<br></br>
             Back-end: Ruby on Rails, ActionMailer, JWT, BCrypt, PostgreSQL<br></br>
-            Deployment: Heroku</p>
+            Deployment: Heroku</i>
             </div>
             </div>
         )

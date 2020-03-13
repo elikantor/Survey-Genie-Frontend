@@ -47,7 +47,7 @@ $rails s
 $git clone git@github.com:elikantor/Survey-Genie-Frontend.git
 $cd Survey-Genie-Frontend
 $npm install & npm start
-$Reply "y" when asked "Would you like to run the app on another port instead?"
+Reply "y" when asked "Would you like to run the app on another port instead?"
 ```
 
 ## Available Scripts
