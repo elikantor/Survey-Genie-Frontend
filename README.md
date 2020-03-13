@@ -7,7 +7,7 @@
 <h3>Usage and Features</h3>
 
 <p>Survey Genie streamlines the survey creation process through a user-friendly UI enabling users to create customized surveys that can vary in length and topic.</p>
-<li>Create a survey that can vary in length.  Surveys can only be deleted by the survey's creator</li>
+<li>Create a survey that can vary in length.  Surveys can only be deleted by the survey's creator.</li>
 <li>Take any survey created on the platform and view the results in a variety of different formats</li>
 <li>Favorite a survey to track specific surveys of interest</li>
 <li>Filter through surveys by title or by those that the user has taken</li>
@@ -15,12 +15,12 @@
 <h3>Prerequisites</h3>
 <p>Backend</p>
 <li>Rails 5</li>
-<li>Bcrypt</li>
 <li>ActiveModelSerializers</li>
 <li>ActionMailer</li>
-<li>PostgresQL</li>
+<li>PostgreSQL</li>
+<li>JWT</li>
+<li>BCrypt</li>
 <br></br>
-
 <p>Frontend</p>
 <li>React</li>
 <li>Redux</li>
