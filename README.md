@@ -33,22 +33,22 @@
 <h7>Clone the backend repo and run the rails server by:</h7>
 
 ```
-$git clone git@github.com:elikantor/Survey-Genie-Backend.git
-$cd Survey-Genie-Backend
-$bundle install
-$rails db:create
-$rails db:migrate
-$rails db:seed
-$rails s
+git clone git@github.com:elikantor/Survey-Genie-Backend.git
+cd Survey-Genie-Backend
+bundle install
+rails db:create
+rails db:migrate
+rails db:seed
+rails s
 ```
 
 <h5>Frontend</h5>
 <h7>Clone the frontend repo and start the frontend server</h7>
 
 ```
-$git clone git@github.com:elikantor/Survey-Genie-Frontend.git
-$cd Survey-Genie-Frontend
-$npm install & npm start
+git clone git@github.com:elikantor/Survey-Genie-Frontend.git
+cd Survey-Genie-Frontend
+npm install & npm start
 Reply "y" when asked "Would you like to run the app on another port instead?"
 ```
 
