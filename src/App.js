@@ -1,7 +1,6 @@
 import React from 'react';
 import {Switch, Route} from 'react-router'
 import {withRouter} from 'react-router-dom'
-
 import {connect} from 'react-redux'
 import {initializeFavorites, addUser, addSurvey, initializeUsers, initializeSurveys, initializeQuestions, initializeAnswers} from './Redux/actions'
 
@@ -17,10 +16,7 @@ import CreateSurvey from './components/CreateSurvey'
 import Footer from './components/Footer'
 import Favorites from './components/Favorites'
 
-const userUrl = "https://survey-genie-api.herokuapp.com/users"
-let surveyUrl = "https://survey-genie-api.herokuapp.com/surveys"
-let answerUrl = "https://survey-genie-api.herokuapp.com/answers"
-let joinerUrl = "https://survey-genie-api.herokuapp.com/user_survey_joiners"
+const API = "http://localhost:3000"
 
 class App extends React.Component{
   
@@ -35,7 +31,6 @@ class App extends React.Component{
     token: "",
     survey_id: 0,
     surveyResult: [],
-    checkbox_answers: [],
     name: "",
     createdQuestions: [],
     counter: 1
@@ -46,7 +41,7 @@ class App extends React.Component{
     if (localStorage.getItem("token")) {
       let token = localStorage.getItem("token")
 
-      fetch("https://survey-genie-api.herokuapp.com/persist", {
+      fetch(`${API}/persist`, {
         headers: {
           "Authorization": `bearer ${token}`
         }
@@ -65,7 +60,7 @@ class App extends React.Component{
       })
     }
 
-    fetch(`${userUrl}`)
+    fetch(`${API}/users`)
     .then(r=>r.json())
     .then(data=>{
       let surveys = []
@@ -101,7 +96,7 @@ class App extends React.Component{
   }
 
 
-//CreateSurvey Methods  
+//Survey Creation Methods  
   //Submits newly CreatedSurvey
   handleSubmit = (questions) => {
     let postObj = questions.map(question => {
@@ -117,7 +112,7 @@ class App extends React.Component{
         }
     })
 
-    fetch(`${surveyUrl}`, {
+    fetch(`${API}/surveys`, {
         method: "POST",
         headers: {
             "Content-type": "application/json"
@@ -143,7 +138,7 @@ class App extends React.Component{
   }
 
   //controls CreateSurvey Form
-  handleChange = (event) => {
+  handleSurveyTitleChange = (event) => {
     this.setState({
         [event.target.name]:event.target.value
     })
@@ -184,11 +179,14 @@ class App extends React.Component{
     }, () => this.props.history.push(`/profile/${this.state.user.id}`))
   }
 
+//Methods to Answer Survey  
   //Posts answers to backend and updates frontend
-  submitSurveyAnswers = (survey, user, e) => {
+  submitAnswers = (survey, user, e) => {
     e.preventDefault()
     let arr = []
     
+    /* surveyResult includes object that has question property and answer property, which is used to
+    update results on backend*/
     for (let el of survey.questions){
       const foundQuestion = this.state.surveyResult.find(obj => obj.question === el.content )
       if(foundQuestion){
@@ -200,7 +198,7 @@ class App extends React.Component{
 
     let i = 0
     while(i< arr.length){
-      fetch(`${answerUrl}/${arr[i].id}`, {
+      fetch(`${API}/answers/${arr[i].id}`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json"
@@ -218,7 +216,7 @@ class App extends React.Component{
       i++
     }
     
-    fetch(`${joinerUrl}`, {
+    fetch(`${API}/user_survey_joiners`, {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -240,50 +238,21 @@ class App extends React.Component{
 
     this.setState({
       survey_id: 0,
-      surveyResult: [],
-      checkbox_answers: []
+      surveyResult: []
     }, ()=> this.props.history.push(`/results/${survey.id}`))
   }
 
   //controls surveyform when being answered
   //Qs argument is all questions in the survey
-  saveAnswer = (Qs, event) => {
-    let currentState = this.state.checkbox_answers
-    //if currentState includes answer that is being changed, the answer is removed from checkbox_answers
-    if(currentState.includes(event.target.value)){
-        let newState = []
-        newState = currentState.filter(ele => ele !== event.target.value)
-        this.setState({
-          checkbox_answers: newState
-        })
-    } else {
-        let newState = []
-        let questionObj = Qs.filter(ele => ele.content === event.target.name)
-        //gets question that is being changed
-        let ansArr = questionObj[0].answers.map(ele=>ele.content)
-        //pushes all previously selected answers into newState, expect if it is part of the same question
-        currentState.map(ele => {
-          if(ansArr.includes(ele)){
-              return null
-          } else {
-              newState.push(ele)
-              return null
-          }
-        })
-        newState.push(event.target.value)
-        this.setState({
-          checkbox_answers: newState
-        })
-    }
-
+  saveAnswer = (question, answer) => {
     let surveyObj = {
-        question: event.target.name,
-        answer: event.target.value
+        question: question,
+        answer: answer
     }
     let y = []
     
     this.state.surveyResult.map(ele => {
-        if(ele.question.includes(event.target.name)){
+        if(ele.question.includes(question)){
             return null
         } else {
             y.push(ele)
@@ -299,7 +268,7 @@ class App extends React.Component{
 
 //login
   handleLoginSubmit = (userInfo) => {
-    fetch("https://survey-genie-api.herokuapp.com/login", {
+    fetch(`${API}/login`, {
       method: "POST",
       headers: {
         "content-type": "application/json"
@@ -324,7 +293,7 @@ class App extends React.Component{
 
 //signup
   handleSignupSubmit = (userInfo) => {
-    fetch("https://survey-genie-api.herokuapp.com/users", {
+    fetch(`${API}/users`, {
       method: "POST",
       headers: {
         "content-type": "application/json"
@@ -372,7 +341,7 @@ class App extends React.Component{
   }
 
   deleteSurvey = (surveyId) => {
-    fetch(`${surveyUrl}/${surveyId}`, {
+    fetch(`${API}/surveys/${surveyId}`, {
       method: "DELETE"
     })
     .then(r=>r.json())
@@ -393,10 +362,10 @@ class App extends React.Component{
             <Route path="/signup" render={ () => <Signup handleSubmit={this.handleSignupSubmit} /> } />
             <Route exact path="/profile/:id" render={(routerProps)=> this.renderProfile(routerProps) } />
             <Route path="/favorites" render={ (routerProps) => <Favorites user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers}  routerProps={routerProps}/> } />
-            <Route exact path="/surveys" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers}  routerProps={routerProps}/> } />
-            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers} checkbox_answers={this.state.checkbox_answers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
+            <Route exact path="/surveys" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers}  routerProps={routerProps}/> } />
+            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
             <Route path="/results/:id" render={(routerProps) => this.renderResults(routerProps) } />
-            <Route path="/createsurvey" render={() => <CreateSurvey cancel={this.cancelSurvey} name={this.state.name} questions={this.state.createdQuestions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleChange={this.handleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
+            <Route path="/createsurvey" render={() => <CreateSurvey cancel={this.cancelSurvey} name={this.state.name} questions={this.state.createdQuestions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleSurveyTitleChange={this.handleSurveyTitleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
             <Route render={ () => <p>Page not Found</p> } />
         </Switch>
         <Footer />

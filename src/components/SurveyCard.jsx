@@ -4,13 +4,13 @@ import {connect} from 'react-redux'
 import {favorite, unfavorite} from '../Redux/actions'
 import {NavLink} from 'react-router-dom'
 const test = '/images/wireframe/image.png'
-let favoriteUrl = "https://survey-genie-api.herokuapp.com/favorites"
+let favoriteUrl = "http://localhost:3000/favorites"
 
 class SurveyCards extends Component{
 
     handleFavorite = (surveyId, userId, favoriteObj=null) => {
         let {favorites} = this.props
-        let fav = favorites.find(f=> f.user_id===userId&&f.survey_id===surveyId)
+        let fav = favorites.find(f=> f.user_id === userId && f.survey_id === surveyId)
         if(!fav){
             fetch(`${favoriteUrl}`, {
                 method: "POST",
@@ -46,7 +46,7 @@ class SurveyCards extends Component{
         let taken = () => respondents.includes(user.id)
         let creator = users.filter(user => user.id === survey.user_id)
         let owner = () => survey.user_id === user.id
-        let fav = favorites.find(f=> (f.user_id===user.id&&f.survey_id===survey.id))
+        let fav = favorites.find(f=> (f.user_id === user.id && f.survey_id === survey.id))
         return(
             <Card raised image={test}>
                 <Card.Content>

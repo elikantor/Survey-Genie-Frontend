@@ -78,7 +78,7 @@ class SurveyContainer extends Component{
     }
 
     renderSurvey = (surveyId) => {
-        let survey=this.props.surveys.find(survey=>survey.id===parseInt(surveyId))
+        let survey=this.props.surveys.find(survey=>survey.id === parseInt(surveyId))
         let creator=this.props.users.find(user=>user.id === survey.user_id)
 
         return (

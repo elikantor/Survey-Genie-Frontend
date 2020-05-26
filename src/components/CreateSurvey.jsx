@@ -11,7 +11,7 @@ class CreateSurvey extends Component{
             <div className="createsurvey">
                 <Segment inverted>
                     <h2>Create a Survey</h2>
-                    <strong><p>Title:</p></strong> <input type="text" name="name" value={this.props.name} onChange={this.props.handleChange} />
+                    <strong><p>Title:</p></strong> <input type="text" name="name" value={this.props.name} onChange={this.props.handleSurveyTitleChange} />
                         <div className="question">
                             {questions}
                         </div>
