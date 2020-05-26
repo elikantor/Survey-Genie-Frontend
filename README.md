@@ -1,8 +1,8 @@
-<h3> This project has been deployed <a href="https://survey-genie-frontend.herokuapp.com/">here</a>.  The backend code is accessible in a seperate repo <a href="https://github.com/elikantor/Survey-Genie-Backend">here</a> <h3>
-
 <h2>Survey Genie</h2>
 
 <p>A survey tool.  Create, respond to, favorite, and view the results of surveys.</p>
+
+<h3> This project has been deployed <a href="https://survey-genie-frontend.herokuapp.com/">here</a>.  The backend code base is accessible in a seperate repo <a href="https://github.com/elikantor/Survey-Genie-Backend">here</a>.  A demo of the app can be viewed on YouTube <a href="https://www.youtube.com/watch?v=01Y8c4iL58U&feature=youtu.be">here</a>.<h3>
 
 <h3>Usage and Features</h3>
 
@@ -33,22 +33,22 @@
 <h7>Clone the backend repo and run the rails server by:</h7>
 
 ```
-$git clone git@github.com:elikantor/Survey-Genie-Backend.git
-$cd Survey-Genie-Backend
-$bundle install
-$rails db:create
-$rails db:migrate
-$rails db:seed
-$rails s
+git clone git@github.com:elikantor/Survey-Genie-Backend.git
+cd Survey-Genie-Backend
+bundle install
+rails db:create
+rails db:migrate
+rails db:seed
+rails s
 ```
 
 <h5>Frontend</h5>
 <h7>Clone the frontend repo and start the frontend server</h7>
 
 ```
-$git clone git@github.com:elikantor/Survey-Genie-Frontend.git
-$cd Survey-Genie-Frontend
-$npm install & npm start
+git clone git@github.com:elikantor/Survey-Genie-Frontend.git
+cd Survey-Genie-Frontend
+npm install & npm start
 Reply "y" when asked "Would you like to run the app on another port instead?"
 ```
 
