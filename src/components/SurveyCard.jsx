@@ -3,7 +3,7 @@ import { Grid, Button, Card, Image, Icon } from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import {favorite, unfavorite} from '../Redux/actions'
 import {NavLink} from 'react-router-dom'
-let favoriteUrl = "http://localhost:3000/favorites"
+let API = "http://survey-genie-api.herokuapp.com"
 
 class SurveyCards extends Component{
 
@@ -11,7 +11,7 @@ class SurveyCards extends Component{
         let {favorites} = this.props
         let fav = favorites.find(f=> f.user_id === userId && f.survey_id === surveyId)
         if(!fav){
-            fetch(`${favoriteUrl}`, {
+            fetch(`${API}/favorites`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json"
@@ -26,7 +26,7 @@ class SurveyCards extends Component{
                 this.props.favorite(favoriteObj)
             })
         } else {
-            fetch(`${favoriteUrl}/${favoriteObj.id}`, {
+            fetch(`${API}/favorites/${favoriteObj.id}`, {
                 method: "DELETE"
             })
             .then(r=>r.json())
