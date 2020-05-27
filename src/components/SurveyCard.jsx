@@ -3,7 +3,6 @@ import { Grid, Button, Card, Image, Icon } from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import {favorite, unfavorite} from '../Redux/actions'
 import {NavLink} from 'react-router-dom'
-const test = '/images/wireframe/image.png'
 let favoriteUrl = "http://localhost:3000/favorites"
 
 class SurveyCards extends Component{
@@ -48,7 +47,7 @@ class SurveyCards extends Component{
         let owner = () => survey.user_id === user.id
         let fav = favorites.find(f=> (f.user_id === user.id && f.survey_id === survey.id))
         return(
-            <Card raised image={test}>
+            <Card>
                 <Card.Content>
                     <Image floated='right' size='mini' src={`${creator[0].image}`}/>
                     <Card.Header>{survey.name}</Card.Header>

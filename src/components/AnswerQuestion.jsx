@@ -7,11 +7,19 @@ export default class AnswerQuestion extends React.Component{
   }
 
   selectAnswer = (e) => {
-    let {saveAnswer, question} = this.props
-    this.setState({
-      answer: e.target.value
-    })
-    saveAnswer(question, e.target.value)
+    let {saveAnswer, removeAnswer, question} = this.props
+    
+    if(this.state.answer !== e.target.value){
+      this.setState({
+        answer: e.target.value
+      })
+      saveAnswer(question.content, e.target.value)
+    } else {
+      this.setState({
+        answer: ""
+      })
+      removeAnswer(e.target.value)
+    }
   }
 
   render(){

@@ -83,7 +83,7 @@ class SurveyContainer extends Component{
 
         return (
             <div className="survey">
-                <Survey survey={survey} user={this.props.user} creator={creator} submitAnswers={this.props.submitAnswers} checkbox_answers={this.props.checkbox_answers} saveAnswer={this.props.saveAnswer}/>
+                <Survey removeAnswer={this.props.removeAnswer} survey={survey} user={this.props.user} creator={creator} submitAnswers={this.props.submitAnswers} checkbox_answers={this.props.checkbox_answers} saveAnswer={this.props.saveAnswer}/>
             </div>
         )
     }

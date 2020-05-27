@@ -6,7 +6,7 @@ export default class Survey extends React.Component {
 
   renderSurvey = () => {
     let {survey, saveAnswer} = this.props
-    return survey.questions.map(question => <AnswerQuestion question={question} saveAnswer={saveAnswer}/>)
+    return survey.questions.map(question => <AnswerQuestion removeAnswer={this.props.removeAnswer} key={question.id} question={question} saveAnswer={saveAnswer}/>)
   }
 
   render(){

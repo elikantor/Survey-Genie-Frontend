@@ -244,15 +244,15 @@ class App extends React.Component{
 
   //controls surveyform when being answered
   //Qs argument is all questions in the survey
-  saveAnswer = (question, answer) => {
+  saveAnswer = (questionName, answer) => {
     let surveyObj = {
-        question: question,
+        question: questionName,
         answer: answer
     }
     let y = []
     
     this.state.surveyResult.map(ele => {
-        if(ele.question.includes(question)){
+        if(ele.question.includes(questionName)){
             return null
         } else {
             y.push(ele)
@@ -263,6 +263,16 @@ class App extends React.Component{
 
     this.setState({
         surveyResult: y
+    },()=>console.log(this.state.surveyResult))
+  }
+
+  //handles case where user tries to unclick answer
+  removeAnswer = (answer) => {
+    let newResults = this.state.surveyResult.filter(obj => {
+      return obj.answer !== answer
+    })
+    this.setState({
+      surveyResult: newResults
     },()=>console.log(this.state.surveyResult))
   }
 
@@ -363,7 +373,7 @@ class App extends React.Component{
             <Route exact path="/profile/:id" render={(routerProps)=> this.renderProfile(routerProps) } />
             <Route path="/favorites" render={ (routerProps) => <Favorites user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitSurveyAnswers}  routerProps={routerProps}/> } />
             <Route exact path="/surveys" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers}  routerProps={routerProps}/> } />
-            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
+            <Route path="/surveys/:id" render={(routerProps) => <SurveyContainer user={this.state.user} deleteSurvey={this.deleteSurvey} submitAnswers={this.submitAnswers} removeAnswer={this.removeAnswer} routerProps={routerProps} saveAnswer={this.saveAnswer}/> } />
             <Route path="/results/:id" render={(routerProps) => this.renderResults(routerProps) } />
             <Route path="/createsurvey" render={() => <CreateSurvey cancel={this.cancelSurvey} name={this.state.name} questions={this.state.createdQuestions} addQuestion={this.addQuestion} handleQuestionChange={this.handleQuestionChange} handleSurveyTitleChange={this.handleSurveyTitleChange} handleSubmit={this.handleSubmit} user={this.state.user}/>} />
             <Route render={ () => <p>Page not Found</p> } />
