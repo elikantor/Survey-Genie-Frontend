@@ -3,7 +3,7 @@ import { Grid, Button, Card, Image, Icon } from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import {favorite, unfavorite} from '../Redux/actions'
 import {NavLink} from 'react-router-dom'
-let API = "http://survey-genie-api.herokuapp.com"
+let API = "https://survey-genie-api.herokuapp.com"
 
 class SurveyCards extends Component{
 

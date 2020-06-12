@@ -16,7 +16,7 @@ import CreateSurvey from './components/CreateSurvey'
 import Footer from './components/Footer'
 import Favorites from './components/Favorites'
 
-const API = "http://survey-genie-api.herokuapp.com"
+const API = "https://survey-genie-api.herokuapp.com"
 
 class App extends React.Component{
   
@@ -303,7 +303,6 @@ class App extends React.Component{
 
 //signup
   handleSignupSubmit = (userInfo) => {
-    console.log(`${API}/users`)
     fetch(`${API}/users`, {
       method: "POST",
       headers: {
@@ -315,6 +314,7 @@ class App extends React.Component{
     })
     .then(r => r.json())
     .then(data => {
+      console.log(data)
       if (!data.error) {
         localStorage.setItem("token", data.token)
         this.props.addUser(data.user)
