@@ -66,7 +66,7 @@ class App extends React.Component{
       let surveys = []
       data.map(user => {
         if(user.surveys.length > 0){
-          user.surveys.map(survey=> surveys.push(survey))
+          user.surveys.map(survey => surveys.push(survey))
         }
         return null
       })

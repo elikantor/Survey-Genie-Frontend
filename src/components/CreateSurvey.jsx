@@ -3,8 +3,10 @@ import './createSurvey.css'
 import Question from './Question'
 import { Button, Segment } from 'semantic-ui-react'
 
-class CreateSurvey extends Component{
+//client side form validation
+//https://medium.com/code-monkey/client-side-form-validation-in-react-40e367de47ba
 
+class CreateSurvey extends Component{
     render(){
         let questions = this.props.questions.length === 0 ? null : this.props.questions.map(question=> <Question key={question.id} handleQuestionChange={this.props.handleQuestionChange} question={question}/>)
         return(
